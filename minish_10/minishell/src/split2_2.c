@@ -21,7 +21,7 @@ void	qt_chk_tst(char const *s, int *i, int *q, char qt)
 	{
 		while (s[(*i)] && s[(*i)] != qt)
 			(*i)++;
-		if (s[(*i)] == qt)
+		if (s[(*i)] && s[(*i)] == qt)
 			(*q)++;
 	}
 	else if (s[(*i)] && s[(*i)] == qt)
@@ -37,7 +37,6 @@ int	qt_check(char const *s)
 	i = 0;
 	j = 0;
 	k = 0;
-	// printf("%c ; i=%i ; j=%i ; k=%i \n", s[i], i, j, k);
 	while (s[i])
 	{
 		if (s[i] == '\'')
@@ -51,6 +50,7 @@ int	qt_check(char const *s)
 	if (!(j % 2 == 0 && k % 2 == 0))
 	{
 		ft_putstr_fd("Err; Unclosed quotes\n", 2);
+		// printf("%c ; i=%i ; j=%i ; k=%i \n", s[i], i, j, k);
 		// while (1) 						// !!!!!!!!!!! LEAK CHKAR< BAYC HASTAT SENC OKA????????
 		// 	;
 		// exit(1);

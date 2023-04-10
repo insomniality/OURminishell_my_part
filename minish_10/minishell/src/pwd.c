@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include "../inc/builtins.h"
+#include "../libft/libft.h"
 
 void	pwd(char **env)
 {
@@ -25,6 +26,8 @@ void	pwd(char **env)
 	{
 		cwd = get_env("PWD", env);
 	}
-	printf("%s\n", cwd);
+	ft_putstr_fd(cwd, 1);
+	ft_putstr_fd("\n", 1);
+	// printf("%s\n", cwd);
 	free(cwd);
 }

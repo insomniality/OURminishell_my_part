@@ -85,27 +85,101 @@ void	_motor_p2(char const **s, char **c, char ***ddy, int **x)
 	}
 }
 
-char *annihilator(char const *s, int *x, char *c)//char **env
+void	annihenv(char **sm, char *c)
 {
-	char	*big;
-	char	a;
-	int		i;
-	int		lup;
-	int		strt;
-
-	char	*sl;
-	char	*sm;
-	char	*sr;
-
 	char	*gl;
 	char	*gm;
 	char	*gr;
 	int		j;
 	int		strtj;
 
-	lup = 0;
+	j = 0;
+	strtj = j;
+	while ((*sm)[j] && ft_strchr((*sm), '$') != NULL) // &(*sm)[strtj]
+	{
+		gm = NULL;
+		j = 0;
+		strtj = j;
+		while ((*sm)[j] != '$')
+			j++;
+		if (j == strtj) // == 0
+			gl = ft_strdup("");
+		else
+			gl = ft_substr((*sm), strtj, j);
+		if (c_check((*sm), j + 1, " 	") || ((*sm)[j] != '\0' && !(*sm)[j + 1]))
+			gm = ft_strdup("$");
+
+
+		j++;
+		strtj = j;
+		while ((*sm)[j] && !c_check((*sm), j, c) && (*sm)[j] != '$')//$PATH_ (ibr prabel)
+			j++;
+		if (gm == NULL)
+		{
+			if (j == strtj) // == 0
+				gm = ft_strdup("");
+			else
+				gm = ft_substr((*sm), strtj, j - strtj);
+
+			if ((ft_strlen(gm) == 1 && gm[0] == '?' && gm[1] == '\0')
+			||  (ft_strlen(gm) > 1 && (gm)[0] == '?' && (gm[1] == ' ' || gm[2] == '\"'))) //ft_strncmp
+			{
+				free(gm);
+				gm = ft_itoa(t_glob->errstat);
+			}
+			else
+			{
+				gr = gm;
+				gm = getenv(gr);
+				free(gr);
+			}
+		}
+		// gm = ft_substr((*sm), strtj, j - 1);
+		// j++;
+		strtj = j;
+		while ((*sm)[j]) //$PATH_ (ibr prabel) 
+			j++;
+		if (j == strtj) // == 0
+			gr = ft_strdup("");
+		else
+			gr = ft_substr((*sm), strtj, j);
+		// gr = ft_substr((*sm), strtj, j);
+		free((*sm));
+		if(!gm)
+			(*sm) = ft_strjoin(gl, "");
+		else
+			(*sm) = ft_strjoin(gl, gm);
+		// strtj = ft_strlen(*sm);
+		free(gl);
+		gl = (*sm);
+		// printf("quoted dollar $$$ == %s\n", gl);
+		(*sm) = ft_strjoin(gl, gr);
+		free(gl);
+		free(gr);
+	}
+}
+
+char *annihilator(char const *s, int *x, char *c)//char **env
+{
+	char	*big;
+	char	a;
+	int		i;
+	int		strt;
+	char	*snt[3];
+
+	// char	*sl;
+	// char	*sm;
+	// char	*sr;
+
+	// char	*gl;
+	// char	*gm;
+	// char	*gr;
+	// int		j;
+	// int		strtj;
+
+	i = 0;
 	big = ft_substr(s, x[1], x[0] - x[1]);
-	while (ft_strchr(&(big[lup]), '\'') != NULL || ft_strchr(&(big[lup]), '\"') != NULL)
+	while (ft_strchr(&(big[i]), '\'') != NULL || ft_strchr(&(big[i]), '\"') != NULL)
 	{
 		if (ft_strchr(big, '\'') == NULL && ft_strchr(big, '\"') == NULL)
 			return (big);
@@ -115,96 +189,56 @@ char *annihilator(char const *s, int *x, char *c)//char **env
 			i++;
 		a = big[i];
 		if (i != strt)
-			sl = ft_substr(big, strt, i - strt);
+			snt[0] = ft_substr(big, strt, i - strt);
 		else
-			sl = ft_strdup("");
+			snt[0] = ft_strdup("");
 		i++;
 		strt = i;
 		
 		while (big[i] && big[i] != a)
 			i++;
 		if (i != strt)
-			sm = ft_substr(big, strt, i - strt);
+			snt[1] = ft_substr(big, strt, i - strt);
 		else
-			sm = ft_strdup("");;
-		// envqt2(c, sm);
-		if (a == '\"' && ft_strchr(sm, '$'))
-		{
-			j = 0;
-			strtj = j;
-			while (sm[j] && ft_strchr(sm, '$') != NULL)
-			{
-				j = 0;
-				strtj = j;
-				while (sm[j] != '$')
-					j++;
-				if (j == strtj) // == 0
-					gl = ft_strdup("");
-				else
-					gl = ft_substr(sm, strtj, j);
-				j++;
-				strtj = j;
-				while (sm[j] && !c_check(sm, j, c) && sm[j] != '$')//$PATH_ (ibr prabel)
-					j++;
-				if (j == strtj)// == 0
-					gm = ft_strdup("");
-				else
-					gm = ft_substr(sm, strtj, j - 1);
-				// gm = ft_substr(sm, strtj, j - 1);
-				gr = gm;
-				gm = getenv(gr);
-				free(gr);
-				// j++;
-				strtj = j;
-				while (sm[j]) //$PATH_ (ibr prabel) 
-					j++;
-				if (j == strtj) // == 0
-					gr = ft_strdup("");
-				else
-					gr = ft_substr(sm, strtj, j);
-				// gr = ft_substr(sm, strtj, j);
-				free(sm);
-				if(!gm)
-					sm = ft_strjoin(gl, "");
-				else
-					sm = ft_strjoin(gl, gm);
-				free(gl);
-				gl = sm;
-				// printf("quoted dollar $$$ == %s\n", gl);
-				sm = ft_strjoin(gl, gr);
-				free(gl);
-				free(gr);
-			}
-		}
+			snt[1] = ft_strdup("");;
+		// envqt2(c, snt[1]);
+		if (a == '\"' && ft_strchr(snt[1], '$'))
+			annihenv(&(snt[1]), c);
 		//
 		i++;
 		strt = i;
 		while (big[i])
 			i++;
 		if (i != strt)
-			sr = ft_substr(big, strt, i - strt);
+			snt[2] = ft_substr(big, strt, i - strt);
 		else
-			sr = ft_strdup("");
+			snt[2] = ft_strdup("");
 		free(big);
-		big = ft_strjoin(sl, sm);
-		free(sl);
-		free(sm);
-		lup = ft_strlen(big);
-		sl = big;
-		big = ft_strjoin(sl, sr);
-		free(sl);
-		free(sr);
+		big = ft_strjoin(snt[0], snt[1]);
+		free(snt[0]);
+		free(snt[1]);
+		i = ft_strlen(big);
+		snt[0] = big;
+		big = ft_strjoin(snt[0], snt[2]);
+		free(snt[0]);
+		free(snt[2]);
 	}
 	// printf("quoted dollar $$$ == %s\n", big);
+	if (ft_strchr(big, '$') != NULL)
+		annihenv(&big, c);
+	if (ft_strchr(big, '$') != NULL)
+		annihenv(&big, c);
 	return (big);
 }
 
-void	redir(char const *s, char *c, int *x)
+void	redir(char const *s, char *c, int *x, int cmdi)
 {
 	char	*r;
 	char	*fname;
+	char	*fn;
 	int		fstrt;
 	int		fd;
+	int		_x[2];
 
 	x[0] = x[1];
 	x[0]++;
@@ -217,39 +251,52 @@ void	redir(char const *s, char *c, int *x)
 		ft_putstr_fd("bash: syntax error near unexpected token `", 2);
 		ft_putchar_fd(s[x[0]], 2);
 		ft_putstr_fd("\'\n", 2);
-		// u exit ~
+		// u  ~
 	}
 	
 	fstrt = x[0];
 	while (s[x[0]] && !c_check(s, x[0], c))
 		x[0]++;
-	fname = ft_substr(s, fstrt, x[0] - fstrt);
-	r = ft_substr(s, x[1], x[0] - x[1]); // ">     <      file1  "
 
+	fname = ft_substr(s, fstrt, x[0] - fstrt);
+	_x[0] = ft_strlen(fname);
+	_x[1] = 0;
+	fn = fname;
+	fname = annihilator(fn, _x, c);
+	free(fn);
+	r = ft_substr(s, x[1], x[0] - x[1]); // ">     <      file1  "
 	if (s[x[1]] != '\0' && s[x[1]] == '>' && s[x[1] + 1] != '>')
 	{
-		fd = open(fname, O_CREAT | O_TRUNC | O_WRONLY);
-		// write(fd, txt, strlen(txt));
-		close(fd);
+		fd = open(fname, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+		if (t_glob->t_cmnds[cmdi].out != 1)
+			close(t_glob->t_cmnds[cmdi].out);
+		t_glob->t_cmnds[cmdi].out = fd;
+		printf("%i\n", t_glob->t_cmnds[cmdi].out);
 	}
 	if (s[x[1]] != '\0' && s[x[1]] == '>' && s[x[1] + 1] == '>')
 	{
-		fd = open(fname, O_CREAT | O_APPEND | O_WRONLY);
-		// while (read(fd, &a, 1) != 0)
-		// 	;
-		// write(fd, txt, strlen(txt)));
-		close(fd);
+		fd = open(fname, O_CREAT | O_APPEND | O_WRONLY, 0644);
+		if (t_glob->t_cmnds[cmdi].out != 1)
+			close(t_glob->t_cmnds[cmdi].out);
+		t_glob->t_cmnds[cmdi].out = fd;
 	}
 	if (s[x[1]] != '\0' && s[x[1]] == '<' && s[x[1] + 1] != '<')
 	{
-		fd = open(fname, O_TRUNC | O_RDONLY);
-		close(fd);
+		fd = open(fname, O_RDONLY, 0644);
+		if (t_glob->t_cmnds[cmdi].inp != 0)
+			close(t_glob->t_cmnds[cmdi].inp);
+		t_glob->t_cmnds[cmdi].inp = fd;
 	}
 	if (s[x[1]] != '\0' && s[x[1]] == '<' && s[x[1] + 1] == '<')
 	{
 		/* code */
 	}	
-
+	if (t_glob->t_cmnds[cmdi].inp == -1 || t_glob->t_cmnds[cmdi].out == -1) // || t_glob->t_cmnds[0].out < -1
+	{
+		ft_putstr_fd("bash: ", 2);
+		ft_putstr_fd(fname, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+	}
 	// if ((x[0] != x[1] + 1) && (s[x[0]] == '>' || s[x[0]] == '<')) // qci error
 	// {
 	// 	ft_putstr_fd("bash: syntax error near unexpected token `", 2);
@@ -261,7 +308,7 @@ void	redir(char const *s, char *c, int *x)
 	// t_glob->t_cmnds->out = fd;
 }
 
-void	_motor(char const *s, char *c, char **ddy, int *x)
+void	_motor(char const *s, char **ddy, int *x, int cmdi)
 {
 	int *_i = &x[0];
 	int *_j = &x[1];
@@ -273,16 +320,16 @@ void	_motor(char const *s, char *c, char **ddy, int *x)
 		// || (!s[x[1]] && x[0] != x[1]) && s[x[1]] != '\0') // && s[x[1]] != '\0' // && s[x[0]] != '\'' && s[x[0]] != '\"'
 		// if(s[x[0]] && !(s[x[0]] == '\'' || s[x[0]] == '\"')) // VTANGAVORA !!!!!!!!!!!!!!!!!!!!
 		// {
-			x[1] = _sp1(s, x, c);
+			x[1] = _sp1(s, x, " 	");
 			// if (s[x[1]] == '\'' || s[x[1]] == '\"' )
 			// 	continue ;
-			if (!( !(s[x[0]]) && c_check(s, x[0] - 1, c)) )
+			if (!( !(s[x[0]]) && c_check(s, x[0] - 1, " 	")) )
 			{
 				if (s[x[1]] == '>' || s[x[1]] == '<')
-					redir(s, c, x);
-				x[0] = _sp2(s, x, c);
+					redir(s, " 	", x, cmdi);
+				x[0] = _sp2(s, x, " 	");
 				if (s[x[1]] != '>' && s[x[1]] != '<')
-					ddy[x[2]++] = annihilator(s, x, c);
+					ddy[x[2]++] = annihilator(s, x, " 	");
 				// if ((s[x[0]] == '\'' && s[x[1]] != '\'') || (s[x[0]] == '\"' 
 				// && s[x[1]] != '\"'))
 				// {
@@ -302,7 +349,7 @@ void	_motor(char const *s, char *c, char **ddy, int *x)
 	}
 }
 
-char	**split2(char const *s, char *c)
+char	**split2(char const *s, char *c, int cmdi)
 {
 	char			**ddy;
 	int				x[3];
@@ -317,7 +364,7 @@ char	**split2(char const *s, char *c)
 	x[1] = 0;
 	x[2] = 0;
 	ddy = (char **)malloc(sizeof(char *) * ((_pieces(s, c) + 1))); // POXEL PIECES@ vor redir@ hashvi charni
-	_motor(s, c, ddy, x);
+	_motor(s, ddy, x, cmdi);
 	ddy[x[2]] = NULL;
 	x[0] = 0;
 	// while (ddy[x[0]] != NULL) // !!!!!!! ES SAGH PETQA SPLIT ANELU @NTACQUM LINI  !!!!!!!!!!!!!!!

@@ -108,7 +108,7 @@ int	_pieces(char const *s, char *c) // vrode arden chishta // V
 				;
 			if (s[i])
 				i++;
-			while (s[i] && !c_check(s, i, " 	\"\'"))
+			while (s[i] && !c_check(s, i, " 	"))
 				i++;
 			// j++;
 		}

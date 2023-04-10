@@ -68,6 +68,7 @@ void	search(char **name, char *pth) // pwd; /pwd; ./pwd; errori depqum ughaki ba
 		ft_putstr_fd("-bash: ", 2);
 		ft_putstr_fd(*name, 2);
 		ft_putstr_fd(": command not found\n", 2);
+		//printf("exiteedddd\n");
 		// t_glob->errstat = 127;
 		exit(127);
 	}

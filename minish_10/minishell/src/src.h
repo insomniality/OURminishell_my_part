@@ -24,7 +24,7 @@
 # include "../inc/builtins.h"
 
 int		ft_strchr_indx(const char *s, int c);
-char	**split2(char const *s, char *c);
+char	**split2(char const *s, char *c, int cmdi);
 void	define_signals();
 int		c_check(char const *s, int idx, char *c);
 void	free_ar(void **spl);

@@ -98,7 +98,6 @@ char	*pipfin(char *t) // xujuja grats; heto parzecnel; "pwd |    " senc depq; SA
 	char	*txt2;
 	char	*txt3;
 	
-	// petq chi
 	txt = ft_strdup(t); // miamit funkciaic drsin@ vor free chanem	
 	eef = ft_strtrim(txt, " "); //!!!!!! karelia tab, enter tenc baner avelacnel; miat heto irakani het khamemeates
 	if (eef[ft_strlen(eef) - 1] == '|')
@@ -114,69 +113,6 @@ char	*pipfin(char *t) // xujuja grats; heto parzecnel; "pwd |    " senc depq; SA
 		free(eef);
 		return (txt);
 	}
-	// while (1)
-	// {
-	// 	// historium kextotna mnum, bayc ste maqrum em strtrim-ov returni vaxt; het dzem? (xosqi "pwd |    "-n sargum em "pwd |")
-	// 	// vorosheci kextot toghnem (aka txt-in join aneluc eef-@ chem ta)
-	// 	eef = ft_strtrim(txt, " "); //!!!!!! karelia tab, enter tenc baner avelacnel; miat heto irakani het khamemeates
-	// 	if (eef[ft_strlen(eef) - 1] == '|')
-	// 	{
-	// 		free(eef);
-	// 		free(txt);
-	// 		ft_putstr_fd("Err: You must input somthing after pipe\n", 2);
-	// 		// exit(1);
-	// 		return (NULL);
-
-	// 		/*
-	// 		return (ft_strdup(t));
-
-	// 		txt3 = readline("> ");
-	// 		while (*txt3 == '\0')
-	// 		{
-	// 			free(txt3);
-	// 			txt3 = readline("> ");
-	// 		}
-	// 		txt2 = ft_strtrim(txt3, " "); // txt2-@ stegh txt3-i maqur tarberakna
-	// 		// free(txt3);
-	// 		if (txt2[ft_strlen(txt2) - 1] == '|')
-	// 		{
-	// 			// karelia rekursiv
-	// 			free(txt2);
-				
-	// 			txt2 = ft_strjoin(txt, txt3);
-	// 			free(txt);
-	// 			txt = txt2;
-	// 			txt2 = NULL;
-
-	// 			free(eef);
-	// 			free(txt3);
-	// 			continue ;
-	// 		}
-	// 		else
-	// 		{
-	// 			// printf("CONT_ =>'%s'\n", txt);
-	// 			free(txt2);
-	// 			// free(txt3);
-	// 		}
-	// 		break ;
-	// 		*/
-	// 	}
-	// 	else
-	// 	{
-	// 		free(eef);
-	// 		return (txt);
-	// 	}
-	// }
-	// txt2 = ft_strjoin(eef, txt3);
-	// free(txt);
-	// txt = txt2;
-	// // txt2 = NULL;
-	// free(txt3);
-	
-	// free(eef);
-
-	// // printf("\n%s\n", txt);
-	// return (txt);
 }
 
 void	lowerc(char ***m_argv)
@@ -235,48 +171,71 @@ void	my_waitpid(pid_t pid)
 	// ft_putstr_fd("\n", 2);
 }
 
-int	is_builtin(char *s, char *arg, t_data *data)
+void	builtin_exec(char *s, char *arg, t_data *data) // mi kanchi, zut stugi
 {
-	int	i;
+	// int	i;
 
-	i = 0;
+	// i = 0;
+	// if (s[x[1]] == '>' || s[x[1]] == '<')
+	// 	redir(s, " 	", x, cmdi);
 	if(ft_memcmp(s, "echo", ft_strlen("echo")) == 0 && ft_strlen(s) == ft_strlen("echo"))
 	{
 		echo(arg); // echo TEXT
-		i = 1;
+		// i = 1;
 	}
 	else if(ft_memcmp(s, "cd", ft_strlen("cd")) == 0 && ft_strlen(s) == ft_strlen("cd"))
 	{
 		cd(arg, data->envp); //cd TEXT //
-		i = 1;
+		// i = 1;
 	}
 	else if(ft_memcmp(s, "pwd", ft_strlen("pwd")) == 0 && ft_strlen(s) == ft_strlen("pwd"))
 	{
 		printf("Bareeeev\n");
 		pwd(data->envp);
 		printf("Veeeeebar\n");
-		i = 1;
+		// i = 1;
 	}
 	else if(ft_memcmp(s, "export", ft_strlen("export")) == 0 && ft_strlen(s) == ft_strlen("export"))
 	{
 		export(arg, data); // export TEXT
-		i = 1;
+		// i = 1;
 	}
 	else if(ft_memcmp(s, "unset", ft_strlen("unset")) == 0 && ft_strlen(s) == ft_strlen("unset"))
 	{
 		// unset();
-		i = 1;
+		// i = 1;
 	}
 	else if(ft_memcmp(s, "env", ft_strlen("env")) == 0 && ft_strlen(s) == ft_strlen("env"))
 	{
 		env((const char **)data->envp);
-		i = 1;
+		// i = 1;
 	}
 	else if(ft_memcmp(s, "exit", ft_strlen("exit")) == 0 && ft_strlen(s) == ft_strlen("exit"))
 	{
-		//exit();
-		i = 1;
+		// exit();
+		// i = 1;
 	}
+}
+
+int	is_builtin(char *s, char *arg, t_data *data) // mi kanchi, zut stugi
+{
+	int	i;
+
+	i = 0;
+	if(ft_memcmp(s, "echo", ft_strlen("echo")) == 0 && ft_strlen(s) == ft_strlen("echo"))
+		i = 1;
+	else if(ft_memcmp(s, "cd", ft_strlen("cd")) == 0 && ft_strlen(s) == ft_strlen("cd"))
+		i = 1;
+	else if(ft_memcmp(s, "pwd", ft_strlen("pwd")) == 0 && ft_strlen(s) == ft_strlen("pwd"))
+		i = 1;
+	else if(ft_memcmp(s, "export", ft_strlen("export")) == 0 && ft_strlen(s) == ft_strlen("export"))
+		i = 1;
+	else if(ft_memcmp(s, "unset", ft_strlen("unset")) == 0 && ft_strlen(s) == ft_strlen("unset"))
+		i = 1;
+	else if(ft_memcmp(s, "env", ft_strlen("env")) == 0 && ft_strlen(s) == ft_strlen("env"))
+		i = 1;
+	else if(ft_memcmp(s, "exit", ft_strlen("exit")) == 0 && ft_strlen(s) == ft_strlen("exit"))
+		i = 1;
 	return (i);
 }
 
@@ -338,7 +297,7 @@ void	*m_pipe(int pipn, char *txt) // ciklik chi (verjum chka pipe vor het ga mai
 		if (txt2[i] == '\0')
 			m_argv = split_fk(txt2, " 	");
 		else
-			m_argv = split2(txt2, " 	");
+			m_argv = split2(txt2, " 	", j);
 		free(txt2);
 		
 		lowerc(&m_argv);
@@ -358,82 +317,89 @@ void	*m_pipe(int pipn, char *txt) // ciklik chi (verjum chka pipe vor het ga mai
 	j = 0;
 	while (j <= pipn) // 1 pipe-i case-@ mtatsi; 0-n petq chi vortev iran 0 chenq talu (for now)
 	{
-		/*
-		// t_red[j] = (t_red *)malloc(sizeof(t_red));
-		// (t_red[j])->hdoc = ft_strjoin();
-
-		// txt2 = txt;
-		// i = 0;
-		// if (ft_strchr(txt, '|') != NULL)
-		// {
-		// 	while (txt2 != NULL && &txt2[i] != ft_strchr(txt2, '|'))
-		// 		i++;
-		// 	txt2 = ft_substr(txt2, 0, i);  // "asdf    " "asdf"
-		// }
-		// else
-		// {
-		// 	while (txt2 != NULL && c_check(txt2, i, " 	")) 
-		// 		i++;
-		// 	txt2 = ft_substr(txt2, i, i + ft_strlen(txt2)); // "dd" "    dd" // "dd      "
-		// }
-		// i = 0;
-		// while (!c_check(txt2, i, " 	") && txt2[i])
-		// 	i++;
-		// if (txt2[i] == '\0')
-		// 	m_argv = split_fk(txt2, " 	");
-		// else
-		// 	m_argv = split2(txt2, " 	");
-		// free(txt2);
-
-		// lowerc(&m_argv);
-
-		// t_glob->t_cmnds->cmd[j] = ft_strdup(m_argv[0]);
-
-		// printf("nya=%s\n", t_glob->t_cmnds->cmd[j]);
-		*/
 		pid[j] = fork();
 		if (pid[j] == 0)
 		{
-			if (j != pipn) // baci verjinic
-				dup2(fd[(j + 1) % pipn][1], STDOUT_FILENO); // write
-			if (j != 0) // baci arajinic
-				dup2(fd[j % pipn][0], STDIN_FILENO); // read
-			i = 0;
-			while (i < pipn * 2)
+			if (t_glob->t_cmnds[j].inp == -1 || t_glob->t_cmnds[j].out == -1) // || t_glob->t_cmnds[0].out < -1
+				exit (1);
+		//		printf("exiteeedddd\n");
+
+			if (t_glob->t_cmnds[j].out != 1)
 			{
-				close(fd[i / 2][i % 2]);
-				close(fd[i / 2][(i + 1) % 2]);
+				// ft_putstr_fd("Alo\n", 2);
+				dup2(t_glob->t_cmnds[j].out, 1);
+				// close(fd[j][1]);
+			}
+			else if (j != pipn) // baci verjinic
+				dup2(fd[j][1], STDOUT_FILENO); // write
+			else if (j != pipn)
+				close(fd[j][1]);
+
+			if (t_glob->t_cmnds[j].inp != 0)
+			{
+				dup2(t_glob->t_cmnds[j].inp, 0);
+				// close(fd[j - 1][0]);
+			}
+			else if (j != 0) // baci arajinic
+				dup2(fd[j - 1][0], STDIN_FILENO); // read
+			else if (j == 0)
+				close(fd[j][0]);
+			// if (t_glob->t_cmds[j].out != 1)
+			// {
+			// 	dup2(t_glob->t_cmds[j].out, 1);
+			// 	if (j != pipn)
+			// 	{
+			// 		close(fd[j][1]);
+			// 		fd[j][1] = -1;
+			// 	}
+			// }
+
+			i = 0;
+			while (i < pipn) // pipn * 2
+			{
+				// close(fd[i / 2][i % 2]);
+				// close(fd[i / 2][(i + 1) % 2]);
+				// if (i != j)
+				// {
+					close(fd[i][0]);
+					close(fd[i][1]);
+				// }
 				i++;
 			}
 			signal(SIGQUIT, SIG_DFL);
 			signal(SIGINT, SIG_DFL);
-			
-			// ft_putstr_fd(t_glob->t_cmnds[j].cmd[0], 2);
-			// write(2, "+\n", 2);
 			if (!(is_builtin(t_glob->t_cmnds[j].cmd[0], t_glob->t_cmnds[j].cmd[0], t_glob))) // ??/, ka pipe, te che, ete chka nor ashxati? (aysinqn built-in@ verjinna)?????
 			{
 				search(&(t_glob->t_cmnds[j].cmd[0]), getenv("PATH"));
 				execve(t_glob->t_cmnds[j].cmd[0], t_glob->t_cmnds[j].cmd, NULL);
 			}
-			// #ESTEGHFREE?
-			exit(1); // stex execve ka; hetevabar petq chi child-um free anel m_argv-n
+			else
+			{
+				builtin_exec(t_glob->t_cmnds[j].cmd[0], t_glob->t_cmnds[j].cmd[0], t_glob);
+				// printf("exiteedddd\n");
+				exit(1); // stex execve ka; hetevabar petq chi child-um free anel m_argv-n
+			}
 		}
-		// if (j != pipn) // baci verjinic
-		// {
-		// 	txt2 = txt;
-		// 	txt = ft_strdup(ft_strchr(txt, '|') + 1);
-		// 	free(txt2);
-		// }
 		free_ar((void **)t_glob->t_cmnds[j].cmd); // !!!
 		j++;
 	}
+
 	i = 0;
-	while (i < pipn * 2)
+	while (i < pipn)
 	{
-		close(fd[i / 2][i % 2]);
-		close(fd[i / 2][(i + 1) % 2]);
+		close(fd[i][0]);
+		close(fd[i][1]);
+		// close(fd[i / 2][i % 2]);
+		// close(fd[i / 2][(i + 1) % 2]);
+		if (i % 2 != 1 && t_glob->t_cmnds[i / 2].inp != 0)
+			close (t_glob->t_cmnds[i].inp);
+		if (i % 2 != 1 && t_glob->t_cmnds[i / 2].out != 1)
+			close (t_glob->t_cmnds[i].out);
 		i++;
 	}
+	
+	
+
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, SIG_IGN);
 	i = 0;
@@ -445,6 +411,7 @@ void	*m_pipe(int pipn, char *txt) // ciklik chi (verjum chka pipe vor het ga mai
 	free_ar((void **)fd);
 
 	free(t_glob->t_cmnds); // VORTEV METS MALLOCA 1 hat vori mej sagh kan
+
 	return (NULL); // inch vor uzenq
 }
 
@@ -500,8 +467,14 @@ void define_signals()
 
 void	main2(int *i, char **txt, char ***m_argv, pid_t *pid)
 {
-	char *txt2;
+	char	*txt2;
+	int		fblt;
 
+	int		out;
+
+	out = dup(1);
+	
+	*pid = 0;
 	t_glob->t_cmnds = (t_cmds *)malloc(sizeof(t_cmds)); //commandneri qanakov enq malloc anum
 	t_glob->t_cmnds->inp = 0;
 	t_glob->t_cmnds->out = 1;
@@ -518,7 +491,7 @@ void	main2(int *i, char **txt, char ***m_argv, pid_t *pid)
 	if ((txt2)[*i] == '\0')
 		*m_argv = split_fk(txt2, " 	");
 	else
-		*m_argv = split2(txt2, " 	");
+		*m_argv = split2(txt2, " 	", 0);
 
 	lowerc(&(*m_argv));
 
@@ -526,25 +499,83 @@ void	main2(int *i, char **txt, char ***m_argv, pid_t *pid)
 
 	*m_argv = NULL;
 	free(txt2);
-	if (!(is_builtin(t_glob->t_cmnds->cmd[0], t_glob->t_cmnds->cmd[1], t_glob)))
+	fblt = is_builtin(t_glob->t_cmnds->cmd[0], t_glob->t_cmnds->cmd[1], t_glob);
+	if (fblt == 0)
+	{
+		// write(2, "ccdd\n", 5);
 		*pid = fork();
+	}
 	if (*pid == 0)
 	{
+		if (t_glob->t_cmnds[0].inp == -1 || t_glob->t_cmnds[0].out == -1) // || t_glob->t_cmnds[0].out < -1
+			exit (1);
+
+		if (t_glob->t_cmnds[0].inp != 0)
+		{
+			dup2(t_glob->t_cmnds[0].inp, 0);
+			// close (t_glob->t_cmnds[0].inp);
+		}
+		if (t_glob->t_cmnds[0].out != 1)
+		{
+			// printf( "%d\n", t_glob->t_cmnds[0].out);
+			dup2(t_glob->t_cmnds[0].out, 1);
+
+			// close (t_glob->t_cmnds[0].out);
+		}
+
+		if (fblt == 1)
+		{
+			builtin_exec(t_glob->t_cmnds->cmd[0], t_glob->t_cmnds->cmd[1], t_glob);
+			dup2(out, 1);
+		}
+
 		search(&(t_glob->t_cmnds->cmd[0]), getenv("PATH"));
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
-		// if(builin chi)
+
+		if (fblt == 0)
+		{
+			// write(2, "aapp\n", 5);
 			execve(t_glob->t_cmnds->cmd[0], t_glob->t_cmnds->cmd, NULL); // stex execve ka; hetevabar petq chi child-um free anel m_argv-n
-		// else
-			// builtin
-		exit(1);
+			printf("cmd not found\n");
+			exit(1);
+		}
 	}
+	if (t_glob->t_cmnds[0].inp != 0)
+		close (t_glob->t_cmnds[0].inp);
+	if (t_glob->t_cmnds[0].out != 1)
+		close (t_glob->t_cmnds[0].out);
+	close(out);
+
 	free_ar((void **)t_glob->t_cmnds->cmd);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, SIG_IGN);
 	my_waitpid(*pid);
 	define_signals();
 	free(t_glob->t_cmnds);
+}
+
+int	ispipe(char *s)
+{
+	int		i;
+	char	a;
+
+	i = 0;
+
+	while (s[i] && s[i] != '|')
+	{
+		a = s[i];
+		if (a == '\'' || a == '\"')
+		{
+			i++;
+			while (s[i] != a)
+				i++;
+		}
+		i++;
+	}
+	if(s[i] && s[i] == '|')
+		return (1);
+	return (0);
 }
 
 int main(int argc, char **argv, char **envp)
@@ -568,6 +599,8 @@ int main(int argc, char **argv, char **envp)
 	define_signals();
 	while (1)
 	{
+		i = 0; // havai
+		i++; // havai
 		txt = readline("minishell ");
 		if (!txt)
 			break ;
@@ -577,9 +610,9 @@ int main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		add_history(txt); // validiz verev? vor "				" depqn el history-i mej grvi
-		if (ft_strchr(txt, '|') != NULL) // lav parsh arats chi; orinak ete '|'-n chakertneri meja etc.
+		if (ispipe(txt)) // lav parsh arats chi; orinak ete '|'-n chakertneri meja etc.
 		{
-			m_pipe(ft_chrcnt(txt, '|'), txt);		
+			m_pipe(ft_chrcnt(txt, '|'), txt);
 			continue ;
 		}
 		else
@@ -591,7 +624,7 @@ int main(int argc, char **argv, char **envp)
 	free_ar((void **)t_glob->envp);
 	free(t_glob);
 
-	ft_putendl_fd("exit", 2);
+	//ft_putendl_fd("exit", 2);
 	return (0);
 }
 
