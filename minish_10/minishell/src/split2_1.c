@@ -277,7 +277,7 @@ void	redir(char const *s, char *c, int *x, int cmdi)
 		if (t_glob->t_cmnds[cmdi].out != 1)
 			close(t_glob->t_cmnds[cmdi].out);
 		t_glob->t_cmnds[cmdi].out = fd;
-		printf("%i\n", t_glob->t_cmnds[cmdi].out);
+		// printf("%i\n", t_glob->t_cmnds[cmdi].out);
 	}
 	if (s[x[1]] != '\0' && s[x[1]] == '>' && s[x[1] + 1] == '>')
 	{

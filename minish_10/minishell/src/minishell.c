@@ -264,15 +264,15 @@ void	*m_pipe(int pipn, char *txt) // ciklik chi (verjum chka pipe vor het ga mai
 	free(txt);
 	txt = txt2;
 	i = 0; //////// Part1; txt is finalized by this point; leaks are managed(not cheacked for sure)
-	fd = malloc(sizeof(int *) * (pipn + 1));
-	fd[pipn] = NULL;
-	while (i < pipn)
+	fd = malloc(sizeof(int *) * (pipn + 1)); // + 3
+	fd[pipn] = NULL; // + 2
+	while (i < pipn)  // + 2
 	{
 		fd[i] = (int *)malloc(sizeof(int) * 2); // miat aravot@ dziiiii
 		pipe(fd[i++]);
 	}
-	pid = malloc(sizeof(int) * (pipn + 2));
-	pid[pipn + 1] = -7; // NULL-i depqum inq@ tiva haskanum. Dra hamar bacasakan tvov em verj@ cuc talis, qanzi pid@ bacasakan chi kara lini.
+	pid = malloc(sizeof(int) * (pipn + 1)); // + 2 araj
+	// pid[pipn + 1] = -7; // NULL-i depqum inq@ tiva haskanum. Dra hamar bacasakan tvov em verj@ cuc talis, qanzi pid@ bacasakan chi kara lini.
 	
 	j = 0; ///////// Part2;
 	while (j <= pipn)
@@ -315,35 +315,40 @@ void	*m_pipe(int pipn, char *txt) // ciklik chi (verjum chka pipe vor het ga mai
 	}
 	
 	j = 0;
+	// if (t_glob->t_cmnds[0].inp != -1)
+	// 	dup2(t_glob->t_cmnds[0].inp, fd[0][0]);
+	// dup2(t_glob->t_cmnds[pipn].out, fd[pipn][1]);
+
 	while (j <= pipn) // 1 pipe-i case-@ mtatsi; 0-n petq chi vortev iran 0 chenq talu (for now)
 	{
 		pid[j] = fork();
 		if (pid[j] == 0)
 		{
+			// if (dup2(fd[j][0], STDIN_FILENO) == -1)
+			// 	exit(1);
+			// if (dup2(fd[j + 1][1], STDOUT_FILENO) == -1)
+			// 	exit (1);
 			if (t_glob->t_cmnds[j].inp == -1 || t_glob->t_cmnds[j].out == -1) // || t_glob->t_cmnds[0].out < -1
 				exit (1);
-		//		printf("exiteeedddd\n");
+				// printf("exiteeedddd\n");
 
 			if (t_glob->t_cmnds[j].out != 1)
 			{
 				// ft_putstr_fd("Alo\n", 2);
-				dup2(t_glob->t_cmnds[j].out, 1);
+				dup2(t_glob->t_cmnds[j].out, STDOUT_FILENO);
 				// close(fd[j][1]);
 			}
 			else if (j != pipn) // baci verjinic
 				dup2(fd[j][1], STDOUT_FILENO); // write
-			else if (j != pipn)
-				close(fd[j][1]);
 
 			if (t_glob->t_cmnds[j].inp != 0)
 			{
-				dup2(t_glob->t_cmnds[j].inp, 0);
+				dup2(t_glob->t_cmnds[j].inp, STDIN_FILENO);
 				// close(fd[j - 1][0]);
 			}
 			else if (j != 0) // baci arajinic
 				dup2(fd[j - 1][0], STDIN_FILENO); // read
-			else if (j == 0)
-				close(fd[j][0]);
+
 			// if (t_glob->t_cmds[j].out != 1)
 			// {
 			// 	dup2(t_glob->t_cmds[j].out, 1);
@@ -361,8 +366,10 @@ void	*m_pipe(int pipn, char *txt) // ciklik chi (verjum chka pipe vor het ga mai
 				// close(fd[i / 2][(i + 1) % 2]);
 				// if (i != j)
 				// {
-					close(fd[i][0]);
+				// if (i != pipn)
 					close(fd[i][1]);
+				// if (i != 0)
+					close(fd[i][0]);
 				// }
 				i++;
 			}
@@ -371,15 +378,16 @@ void	*m_pipe(int pipn, char *txt) // ciklik chi (verjum chka pipe vor het ga mai
 			if (!(is_builtin(t_glob->t_cmnds[j].cmd[0], t_glob->t_cmnds[j].cmd[0], t_glob))) // ??/, ka pipe, te che, ete chka nor ashxati? (aysinqn built-in@ verjinna)?????
 			{
 				search(&(t_glob->t_cmnds[j].cmd[0]), getenv("PATH"));
-				execve(t_glob->t_cmnds[j].cmd[0], t_glob->t_cmnds[j].cmd, NULL);
+				execve(t_glob->t_cmnds[j].cmd[0], t_glob->t_cmnds[j].cmd, 0);
 			}
 			else
 			{
 				builtin_exec(t_glob->t_cmnds[j].cmd[0], t_glob->t_cmnds[j].cmd[0], t_glob);
 				// printf("exiteedddd\n");
-				exit(1); // stex execve ka; hetevabar petq chi child-um free anel m_argv-n
 			}
+				exit(1); // stex execve ka; hetevabar petq chi child-um free anel m_argv-n
 		}
+		// printf("hello\n");
 		free_ar((void **)t_glob->t_cmnds[j].cmd); // !!!
 		j++;
 	}
@@ -389,21 +397,27 @@ void	*m_pipe(int pipn, char *txt) // ciklik chi (verjum chka pipe vor het ga mai
 	{
 		close(fd[i][0]);
 		close(fd[i][1]);
+		if (t_glob->t_cmnds[i].inp != 0)
+			close(t_glob->t_cmnds[i].inp);
+		if (t_glob->t_cmnds[i].out != 1)
+			close(t_glob->t_cmnds[i].out);	
+		
 		// close(fd[i / 2][i % 2]);
 		// close(fd[i / 2][(i + 1) % 2]);
-		if (i % 2 != 1 && t_glob->t_cmnds[i / 2].inp != 0)
-			close (t_glob->t_cmnds[i].inp);
-		if (i % 2 != 1 && t_glob->t_cmnds[i / 2].out != 1)
-			close (t_glob->t_cmnds[i].out);
+		// if (i % 2 != 1 && t_glob->t_cmnds[i / 2].inp != 0)
+			// close (t_glob->t_cmnds[i].inp);
+		// if (i % 2 != 1 && t_glob->t_cmnds[i / 2].out != 1)
+			// close (t_glob->t_cmnds[i].out);
 		i++;
 	}
-	
-	
+
+	i = 0;
+	printf("aaaaaaaaa\n");
 
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, SIG_IGN);
 	i = 0;
-	while (pid[i] != -7)
+	while (i < pipn + 1)
 		my_waitpid(pid[i++]);
 	define_signals();
 	free(txt);
@@ -603,7 +617,10 @@ int main(int argc, char **argv, char **envp)
 		i++; // havai
 		txt = readline("minishell ");
 		if (!txt)
+		{
+			printf("minishell fdgcgvhbjnm%s\n", txt);
 			break ;
+		}
 		if (validornot(txt) == 0)
 		{
 			free(txt);
