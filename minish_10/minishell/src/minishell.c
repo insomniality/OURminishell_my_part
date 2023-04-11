@@ -315,62 +315,62 @@ void	*m_pipe(int pipn, char *txt) // ciklik chi (verjum chka pipe vor het ga mai
 	}
 	
 	j = 0;
-	// if (t_glob->t_cmnds[0].inp != -1)
-	// 	dup2(t_glob->t_cmnds[0].inp, fd[0][0]);
-	// dup2(t_glob->t_cmnds[pipn].out, fd[pipn][1]);
+
+	int	fdin = dup(0);
+	int	fdout = dup(1);
+
+	// int	fdout2 = dup(1);
+
+	//skizb
+
+	// if (j == 0)
+	// {
+	// 	if (t_glob->t_cmnds[j].inp != 0)
+	// 		dup2(fdin, STDIN_FILENO);
+	// }
+	// else if (j == pipn)
+	// {
+	// 	if (t_glob->t_cmnds[j].out != 1)
+	// 		dup2(fdout, STDOUT_FILENO);	
+	// }
+	
 
 	while (j <= pipn) // 1 pipe-i case-@ mtatsi; 0-n petq chi vortev iran 0 chenq talu (for now)
 	{
 		pid[j] = fork();
 		if (pid[j] == 0)
 		{
-			// if (dup2(fd[j][0], STDIN_FILENO) == -1)
-			// 	exit(1);
-			// if (dup2(fd[j + 1][1], STDOUT_FILENO) == -1)
-			// 	exit (1);
 			if (t_glob->t_cmnds[j].inp == -1 || t_glob->t_cmnds[j].out == -1) // || t_glob->t_cmnds[0].out < -1
 				exit (1);
-				// printf("exiteeedddd\n");
-
-			if (t_glob->t_cmnds[j].out != 1)
-			{
-				// ft_putstr_fd("Alo\n", 2);
+				
+				// if (j == 0)
+				// {
+				// 	if (t_glob->t_cmnds[j].inp != 0)
+				// 		dup2(fdin, STDIN_FILENO);
+				// }
+				// else if (j == pipn)
+				// {
+				// 	if (t_glob->t_cmnds[j].out != 1)
+				// 		dup2(fdout, 1);	
+				// }
+			if (j == pipn && t_glob->t_cmnds[j].out == 1)
+				dup2(fdout, 1);	
+			else if (t_glob->t_cmnds[j].out != 1)
 				dup2(t_glob->t_cmnds[j].out, STDOUT_FILENO);
-				// close(fd[j][1]);
-			}
 			else if (j != pipn) // baci verjinic
 				dup2(fd[j][1], STDOUT_FILENO); // write
-
-			if (t_glob->t_cmnds[j].inp != 0)
-			{
-				dup2(t_glob->t_cmnds[j].inp, STDIN_FILENO);
-				// close(fd[j - 1][0]);
-			}
+			if (j == 0 && t_glob->t_cmnds[j].inp == 0)
+				dup2(fdin, STDIN_FILENO);
+			else if (t_glob->t_cmnds[j].inp != 0)
+				dup2(t_glob->t_cmnds[j].inp, 0);
 			else if (j != 0) // baci arajinic
 				dup2(fd[j - 1][0], STDIN_FILENO); // read
-
-			// if (t_glob->t_cmds[j].out != 1)
-			// {
-			// 	dup2(t_glob->t_cmds[j].out, 1);
-			// 	if (j != pipn)
-			// 	{
-			// 		close(fd[j][1]);
-			// 		fd[j][1] = -1;
-			// 	}
-			// }
 
 			i = 0;
 			while (i < pipn) // pipn * 2
 			{
-				// close(fd[i / 2][i % 2]);
-				// close(fd[i / 2][(i + 1) % 2]);
-				// if (i != j)
-				// {
-				// if (i != pipn)
 					close(fd[i][1]);
-				// if (i != 0)
 					close(fd[i][0]);
-				// }
 				i++;
 			}
 			signal(SIGQUIT, SIG_DFL);
@@ -381,13 +381,9 @@ void	*m_pipe(int pipn, char *txt) // ciklik chi (verjum chka pipe vor het ga mai
 				execve(t_glob->t_cmnds[j].cmd[0], t_glob->t_cmnds[j].cmd, 0);
 			}
 			else
-			{
 				builtin_exec(t_glob->t_cmnds[j].cmd[0], t_glob->t_cmnds[j].cmd[0], t_glob);
-				// printf("exiteedddd\n");
-			}
-				exit(1); // stex execve ka; hetevabar petq chi child-um free anel m_argv-n
+			exit(1); // stex execve ka; hetevabar petq chi child-um free anel m_argv-n
 		}
-		// printf("hello\n");
 		free_ar((void **)t_glob->t_cmnds[j].cmd); // !!!
 		j++;
 	}
@@ -397,10 +393,10 @@ void	*m_pipe(int pipn, char *txt) // ciklik chi (verjum chka pipe vor het ga mai
 	{
 		close(fd[i][0]);
 		close(fd[i][1]);
-		if (t_glob->t_cmnds[i].inp != 0)
-			close(t_glob->t_cmnds[i].inp);
-		if (t_glob->t_cmnds[i].out != 1)
-			close(t_glob->t_cmnds[i].out);	
+		// if (t_glob->t_cmnds[i].inp != 0)
+		// 	close(t_glob->t_cmnds[i].inp);
+		// if (t_glob->t_cmnds[i].out != 1)
+		// 	close(t_glob->t_cmnds[i].out);	
 		
 		// close(fd[i / 2][i % 2]);
 		// close(fd[i / 2][(i + 1) % 2]);
@@ -542,14 +538,25 @@ void	main2(int *i, char **txt, char ***m_argv, pid_t *pid)
 			builtin_exec(t_glob->t_cmnds->cmd[0], t_glob->t_cmnds->cmd[1], t_glob);
 			dup2(out, 1);
 		}
+		
+		ft_putstr_fd(t_glob->t_cmnds->cmd[0], 2); //
+		ft_putstr_fd("\n", 2); //
 
 		search(&(t_glob->t_cmnds->cmd[0]), getenv("PATH"));
+
+		ft_putstr_fd(t_glob->t_cmnds->cmd[0], 2); //
+		ft_putstr_fd("\n", 2); //
+		ft_putstr_fd("\n", 2); //
+
+
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
+
 
 		if (fblt == 0)
 		{
 			// write(2, "aapp\n", 5);
+			// search(&(t_glob->t_cmnds[0].cmd[0]), getenv("PATH"));
 			execve(t_glob->t_cmnds->cmd[0], t_glob->t_cmnds->cmd, NULL); // stex execve ka; hetevabar petq chi child-um free anel m_argv-n
 			printf("cmd not found\n");
 			exit(1);

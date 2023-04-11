@@ -20,15 +20,18 @@ void	search(char **name, char *pth) // pwd; /pwd; ./pwd; errori depqum ughaki ba
 	char	*buf1;
 	char	*buf2;
 
-	// write(2, "=>", 1);
+	// write(2, ";", 1);
 	// write(2, *name, ft_strlen(*name));
-	// write(2, ";\n", 1);
+	// write(2, ";\n", 2);
 
 	if ((*name)[0] && (*name)[0] == '.' && (*name)[1] && (*name)[1] == '/')
-		pts = split_fk(*name, " 	");
-	else
-		pts = ft_split(pth, ':');
-	
+	{
+		buf1 = ft_substr(*name, 2, ft_strlen(*name) - 2);
+		free(*name);
+		*name = buf1;
+		return ;
+	}
+	pts = ft_split(pth, ':');
 	i = 0;
 	while (pts[i] != NULL)
 	{
