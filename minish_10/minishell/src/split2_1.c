@@ -95,20 +95,20 @@ void	annihenv(char **sm, char *c)
 
 	j = 0;
 	strtj = j;
-	while ((*sm)[j] && ft_strchr((*sm), '$') != NULL) // &(*sm)[strtj]
+	while ((*sm)[j] && ft_strchr(&((*sm)[strtj]), '$') != NULL) // &(*sm)[strtj]
 	{
 		gm = NULL;
-		j = 0;
-		strtj = j;
+		j = strtj;
+		// strtj = j;
 		while ((*sm)[j] != '$')
 			j++;
-		if (j == strtj) // == 0
+		if (j == 0) // == 0
 			gl = ft_strdup("");
 		else
-			gl = ft_substr((*sm), strtj, j);
-		if (c_check((*sm), j + 1, " 	") || ((*sm)[j] != '\0' && !(*sm)[j + 1]))
-			gm = ft_strdup("$");
+			gl = ft_substr((*sm), 0, j);
 
+		if (c_check((*sm), j + 1, " 	") || ((*sm)[j] && !(*sm)[j + 1]))
+			gm = ft_strdup("$");
 
 		j++;
 		strtj = j;
@@ -130,7 +130,7 @@ void	annihenv(char **sm, char *c)
 			else
 			{
 				gr = gm;
-				gm = getenv(gr);
+				gm = ft_strjoin("", getenv(gr));
 				free(gr);
 			}
 		}
@@ -142,20 +142,23 @@ void	annihenv(char **sm, char *c)
 		if (j == strtj) // == 0
 			gr = ft_strdup("");
 		else
-			gr = ft_substr((*sm), strtj, j);
+			gr = ft_substr((*sm), strtj, j - strtj);
 		// gr = ft_substr((*sm), strtj, j);
 		free((*sm));
 		if(!gm)
 			(*sm) = ft_strjoin(gl, "");
 		else
 			(*sm) = ft_strjoin(gl, gm);
-		// strtj = ft_strlen(*sm);
+		strtj = ft_strlen(*sm);
+		j = strtj;
 		free(gl);
 		gl = (*sm);
 		// printf("quoted dollar $$$ == %s\n", gl);
 		(*sm) = ft_strjoin(gl, gr);
 		free(gl);
 		free(gr);
+		if (gm != NULL)
+			free(gm);
 	}
 }
 
@@ -179,55 +182,58 @@ char *annihilator(char const *s, int *x, char *c)//char **env
 
 	i = 0;
 	big = ft_substr(s, x[1], x[0] - x[1]);
-	while (ft_strchr(&(big[i]), '\'') != NULL || ft_strchr(&(big[i]), '\"') != NULL)
+	if (ft_strchr(&(big[i]), '\'') != NULL || ft_strchr(&(big[i]), '\"') != NULL)
 	{
-		if (ft_strchr(big, '\'') == NULL && ft_strchr(big, '\"') == NULL)
-			return (big);
-		i = 0;
-		strt = 0;
-		while (big[i] != '\'' && big[i] != '\"')
+		while (ft_strchr(&(big[i]), '\'') != NULL || ft_strchr(&(big[i]), '\"') != NULL)
+		{
+			if (ft_strchr(big, '\'') == NULL && ft_strchr(big, '\"') == NULL)
+				return (big);
+			i = 0;
+			strt = 0;
+			while (big[i] != '\'' && big[i] != '\"')
+				i++;
+			a = big[i];
+			if (i != strt)
+				snt[0] = ft_substr(big, strt, i - strt);
+			else
+				snt[0] = ft_strdup("");
 			i++;
-		a = big[i];
-		if (i != strt)
-			snt[0] = ft_substr(big, strt, i - strt);
-		else
-			snt[0] = ft_strdup("");
-		i++;
-		strt = i;
-		
-		while (big[i] && big[i] != a)
+			strt = i;
+			
+			while (big[i] && big[i] != a)
+				i++;
+			if (i != strt)
+				snt[1] = ft_substr(big, strt, i - strt);
+			else
+				snt[1] = ft_strdup("");;
+			// envqt2(c, snt[1]);
+			if (a == '\"' && ft_strchr(snt[1], '$'))
+				annihenv(&(snt[1]), c);
+			//
 			i++;
-		if (i != strt)
-			snt[1] = ft_substr(big, strt, i - strt);
-		else
-			snt[1] = ft_strdup("");;
-		// envqt2(c, snt[1]);
-		if (a == '\"' && ft_strchr(snt[1], '$'))
-			annihenv(&(snt[1]), c);
-		//
-		i++;
-		strt = i;
-		while (big[i])
-			i++;
-		if (i != strt)
-			snt[2] = ft_substr(big, strt, i - strt);
-		else
-			snt[2] = ft_strdup("");
-		free(big);
-		big = ft_strjoin(snt[0], snt[1]);
-		free(snt[0]);
-		free(snt[1]);
-		i = ft_strlen(big);
-		snt[0] = big;
-		big = ft_strjoin(snt[0], snt[2]);
-		free(snt[0]);
-		free(snt[2]);
+			strt = i;
+			while (big[i])
+				i++;
+			if (i != strt)
+				snt[2] = ft_substr(big, strt, i - strt);
+			else
+				snt[2] = ft_strdup("");
+			free(big);
+			big = ft_strjoin(snt[0], snt[1]);
+			free(snt[0]);
+			free(snt[1]);
+			i = ft_strlen(big);
+			snt[0] = big;
+			big = ft_strjoin(snt[0], snt[2]);
+			free(snt[0]);
+			free(snt[2]);
+		}
 	}
+	else if (ft_strchr(big, '$') != NULL)
+		annihenv(&big, c);
 	// printf("quoted dollar $$$ == %s\n", big);
-	if (ft_strchr(big, '$') != NULL)
-		annihenv(&big, c);
-	if (ft_strchr(big, '$') != NULL)
-		annihenv(&big, c);
+	// if (ft_strchr(big, '$') != NULL)
+	// 	annihenv(&big, c);
 	return (big);
 }
 
@@ -251,7 +257,7 @@ void	redir(char const *s, char *c, int *x, int cmdi)
 		ft_putstr_fd("bash: syntax error near unexpected token `", 2);
 		ft_putchar_fd(s[x[0]], 2);
 		ft_putstr_fd("\'\n", 2);
-		// u  ~
+		// u exit ~
 	}
 	
 	fstrt = x[0];
