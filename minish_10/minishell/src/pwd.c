@@ -6,7 +6,7 @@
 /*   By: mavardan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 20:00:56 by mavardan          #+#    #+#             */
-/*   Updated: 2023/04/03 20:01:53 by mavardan         ###   ########.fr       */
+/*   Updated: 2023/04/05 20:20:16 by mavardan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 #include <unistd.h>
 #include <errno.h>
 #include "../inc/builtins.h"
-#include "../libft/libft.h"
 
-void	pwd(char **env)
+void	pwd(t_data *data)
 {
+	char	**env;
 	char	*cwd;
 
+	env = data->envp;
 	cwd = getcwd(NULL, 0);
 	if (!cwd && ENOENT == errno)
 	{
 		cwd = get_env("PWD", env);
 	}
-	ft_putstr_fd(cwd, 1);
-	ft_putstr_fd("\n", 1);
-	// printf("%s\n", cwd);
+	printf("%s\n", cwd);
 	free(cwd);
+	data->exit_status = 0;
 }

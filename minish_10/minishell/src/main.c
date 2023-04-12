@@ -6,7 +6,7 @@
 /*   By: mavardan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 20:43:50 by mavardan          #+#    #+#             */
-/*   Updated: 2023/03/08 21:26:06 by mavardan         ###   ########.fr       */
+/*   Updated: 2023/04/05 21:15:33 by mavardan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,64 @@ void	fill_env(char **envp, t_data *data)
 	data->envp[cnt] = NULL;
 }
 
-// int main(int argc, char **argv, char **envp)
+char	**get_argv(char **argv)
+{
+	int		i;
+	int		cnt;
+	char	**n_argv;
+
+	cnt = 0;
+	while (argv && argv[cnt])
+		++cnt;
+	n_argv = (char **)malloc(sizeof(char *) * cnt);
+	if (!n_argv)
+		return (NULL);
+	i = 1;
+	while (i < cnt)
+	{
+		n_argv[i - 1] = ft_strdup(argv[i]);
+		++i;
+	}
+	n_argv[cnt - 1] = NULL;
+	return (n_argv);
+}
+
+static void	fill_exportp(t_data *data)
+{
+	char	**envp;
+	int		i;
+	int		len;
+	int		pos;
+
+	envp = data->envp;
+	len = envp_len(envp);
+	data->exportp = (char **)malloc(sizeof(char *) * (len - 1));
+	if (!data->exportp)
+	{
+		perror("data->env");
+		return ;
+	}
+	i = 0;
+	while (i < len - 2)
+	{
+		data->exportp[i] = ft_strjoin(get_env_name(envp[i]), "=\"");
+		data->exportp[i] = ft_strjoin(data->exportp[i], get_env_val(envp[i]));
+		data->exportp[i] = ft_strjoin(data->exportp[i], "\"");
+		++i;
+	}
+	data->envp[len - 1] = NULL;
+}
+
+// int	main(int argc, char **argv, char **envp)
 // {
 // 	t_data	*data;
+
 // 	data = (t_data *)malloc(sizeof(t_data));
+// 	data->exit_status = 0;
 // 	fill_env(envp, data);
-// 	int k = 0;
-// 	while (k != 5)
-// 	{
-// 		pwd(data->envp);
-// 		scanf("%d", &k);
-// 	}
+// 	env((const char **)data->envp);
+// 	fill_exportp(data);
+// 	printf("\n--------------------------------------\n");
+// 	print_export((const char **)data->exportp);
 // 	return (0);
 // }

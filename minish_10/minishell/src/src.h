@@ -34,10 +34,13 @@ int		qt_check(char const *s);
 int		c_check(char const *s, int idx, char *c);
 void	envqt(char *c, char **ddy, int x);
 void	envqt2(char *c, char *ddy);
-char *annihilator(char const *s, int *x, char *c);
+char	*annihilator(char const *s, int *x, char *c);
+void	annihenv(char **sm, char *c);
 int		qt_strt(char const *s, int *x, char *c);
 void	quoter(char const *s, char *cq, char **ddy, int *x);
 int		_sp2(char const *s, int *x, char *c);
 int		_pieces(char const *s, char *c);
+void	redir(char const *s, char *c, int *x, int cmdi);
+
 
 #endif

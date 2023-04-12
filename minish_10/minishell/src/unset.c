@@ -6,14 +6,13 @@
 /*   By: mavardan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 20:03:46 by mavardan          #+#    #+#             */
-/*   Updated: 2023/03/03 20:37:06 by mavardan         ###   ########.fr       */
+/*   Updated: 2023/04/05 20:53:43 by mavardan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "../inc/builtins.h"
 #include "../libft/libft.h"
-
 
 int	unset(char *env_var, t_data *data)
 {
@@ -48,7 +47,7 @@ int	unset(char *env_var, t_data *data)
 		data->envp = envp_new;
 		return (0);
 	}
-	return (-1);
+	return (1);
 }
 
 //static void	fill_env(char **envp, t_data *data)

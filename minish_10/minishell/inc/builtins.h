@@ -15,16 +15,11 @@
 
 # define NOT_IN_ENV -2
 
-
-// typedef struct s_cmd
-// {
-// 	char	*cmd_name;
-// 	char	*args;
-// }				t_cmd;
-
-
-/////////
-
+typedef struct s_cmd
+{
+	char	*cmd_name;
+	char	*args;
+}				t_cmd;
 
 typedef struct s_cmds
 {
@@ -36,28 +31,43 @@ typedef struct s_cmds
 typedef struct	s_data
 {
 	int		errstat;
-	char	**envp;
 	t_cmds	*t_cmnds;
+	char	**envp;
+	char			**exportp;
+	unsigned char	exit_status;
 }				t_data;
 
-t_data *t_glob;
+t_data			*t_glob;
 
-void	fill_env(char **envp, t_data *data);
-int		is_var_in_env(const char *s, const char *ptrn);
-int		update_env(char *env_var, char *val, char **envp);
-int		add_env(char *env_var, char *val, t_data *data);
-char	*get_env(char *env_var, char **envp);
-void	pwd(char **envp);
-int		cd(const char *new_path, char **envp);
-int		get_env_var_pos_by_name(const char *env_var, char **envp);
+void			fill_env(char **envp, t_data *data);
+void			pwd(t_data *data);
 //void	fill_env(const char **envp, t_data *data);
-void	env(const char **envp);
-void	echo(char *text);
-void	export(char *text, t_data *data);
-int		unset(char *env_var, t_data *data);
-int		envp_len(char **envp);
-void	ft_free(char **p, int count);
 //char	**extend_envp(char **envp_old);
+int				cd(char **new_path, t_data *data);
+//void			fill_env(const char **envp, t_data *data);
+int				env(t_data *data);
+int				echo(char **text, t_data *data);
+int				export(char **text, t_data *data);
+int				unset(char *env_var, t_data *data);
+int				is_var_in_env(const char *s, const char *ptrn);
+int				update_env(char *env_var, char *val, t_data *data);
+int				update_export(char *var, char *val, t_data *data);
+int				add_env(char *env_var, char *val, t_data *data);
+char			*get_env(char *env_var, char **envp);
+int				get_env_var_pos_by_name(const char *env_var, char **envp);
+int				get_export_var_pos_by_name(const char *var, char **exportp);
+int				envp_len(char **envp);
+void			ft_free(char **p, int count);
+int				equal_sign_pos(char *text);
+char			*get_env_val(char *env_line);
+char			*get_env_name(char *env_line);
+char			**extend_ch_pp(char **ch_pp);
+void			print_export(const char **exportp);
+unsigned char	convert_to_num_for_exit(const char *str);
+int				is_valid_num_for_exit(const char *str);
+int				exit_for_prj(char **text, t_data *data);
+int				set_get_exit_status(t_data *data, int exit_status);
+char			**get_argv(char **argv);
 
 
 #endif

@@ -61,7 +61,6 @@ int	_sp2(char const *s, int *x, char *c)
 	return (x[0]);
 }
 
-
 void	_motor_p2(char const **s, char **c, char ***ddy, int **x)
 {
 	int *_i = &(*x)[0];
@@ -83,158 +82,6 @@ void	_motor_p2(char const **s, char **c, char ***ddy, int **x)
 			(*x)[1] = (*x)[0] + 1;
 		}
 	}
-}
-
-void	annihenv(char **sm, char *c)
-{
-	char	*gl;
-	char	*gm;
-	char	*gr;
-	int		j;
-	int		strtj;
-
-	j = 0;
-	strtj = j;
-	while ((*sm)[j] && ft_strchr(&((*sm)[strtj]), '$') != NULL) // &(*sm)[strtj]
-	{
-		gm = NULL;
-		j = strtj;
-		// strtj = j;
-		while ((*sm)[j] != '$')
-			j++;
-		if (j == 0) // == 0
-			gl = ft_strdup("");
-		else
-			gl = ft_substr((*sm), 0, j);
-
-		if (c_check((*sm), j + 1, " 	") || ((*sm)[j] && !(*sm)[j + 1]))
-			gm = ft_strdup("$");
-
-		j++;
-		strtj = j;
-		while ((*sm)[j] && !c_check((*sm), j, c) && (*sm)[j] != '$')//$PATH_ (ibr prabel)
-			j++;
-		if (gm == NULL)
-		{
-			if (j == strtj) // == 0
-				gm = ft_strdup("");
-			else
-				gm = ft_substr((*sm), strtj, j - strtj);
-
-			if ((ft_strlen(gm) == 1 && gm[0] == '?' && gm[1] == '\0')
-			||  (ft_strlen(gm) > 1 && (gm)[0] == '?' && (gm[1] == ' ' || gm[2] == '\"'))) //ft_strncmp
-			{
-				free(gm);
-				gm = ft_itoa(t_glob->errstat);
-			}
-			else
-			{
-				gr = gm;
-				gm = ft_strjoin("", getenv(gr));
-				free(gr);
-			}
-		}
-		// gm = ft_substr((*sm), strtj, j - 1);
-		// j++;
-		strtj = j;
-		while ((*sm)[j]) //$PATH_ (ibr prabel) 
-			j++;
-		if (j == strtj) // == 0
-			gr = ft_strdup("");
-		else
-			gr = ft_substr((*sm), strtj, j - strtj);
-		// gr = ft_substr((*sm), strtj, j);
-		free((*sm));
-		if(!gm)
-			(*sm) = ft_strjoin(gl, "");
-		else
-			(*sm) = ft_strjoin(gl, gm);
-		strtj = ft_strlen(*sm);
-		j = strtj;
-		free(gl);
-		gl = (*sm);
-		// printf("quoted dollar $$$ == %s\n", gl);
-		(*sm) = ft_strjoin(gl, gr);
-		free(gl);
-		free(gr);
-		if (gm != NULL)
-			free(gm);
-	}
-}
-
-char *annihilator(char const *s, int *x, char *c)//char **env
-{
-	char	*big;
-	char	a;
-	int		i;
-	int		strt;
-	char	*snt[3];
-
-	// char	*sl;
-	// char	*sm;
-	// char	*sr;
-
-	// char	*gl;
-	// char	*gm;
-	// char	*gr;
-	// int		j;
-	// int		strtj;
-
-	i = 0;
-	big = ft_substr(s, x[1], x[0] - x[1]);
-	if (ft_strchr(&(big[i]), '\'') != NULL || ft_strchr(&(big[i]), '\"') != NULL)
-	{
-		while (ft_strchr(&(big[i]), '\'') != NULL || ft_strchr(&(big[i]), '\"') != NULL)
-		{
-			if (ft_strchr(big, '\'') == NULL && ft_strchr(big, '\"') == NULL)
-				return (big);
-			i = 0;
-			strt = 0;
-			while (big[i] != '\'' && big[i] != '\"')
-				i++;
-			a = big[i];
-			if (i != strt)
-				snt[0] = ft_substr(big, strt, i - strt);
-			else
-				snt[0] = ft_strdup("");
-			i++;
-			strt = i;
-			
-			while (big[i] && big[i] != a)
-				i++;
-			if (i != strt)
-				snt[1] = ft_substr(big, strt, i - strt);
-			else
-				snt[1] = ft_strdup("");;
-			// envqt2(c, snt[1]);
-			if (a == '\"' && ft_strchr(snt[1], '$'))
-				annihenv(&(snt[1]), c);
-			//
-			i++;
-			strt = i;
-			while (big[i])
-				i++;
-			if (i != strt)
-				snt[2] = ft_substr(big, strt, i - strt);
-			else
-				snt[2] = ft_strdup("");
-			free(big);
-			big = ft_strjoin(snt[0], snt[1]);
-			free(snt[0]);
-			free(snt[1]);
-			i = ft_strlen(big);
-			snt[0] = big;
-			big = ft_strjoin(snt[0], snt[2]);
-			free(snt[0]);
-			free(snt[2]);
-		}
-	}
-	else if (ft_strchr(big, '$') != NULL)
-		annihenv(&big, c);
-	// printf("quoted dollar $$$ == %s\n", big);
-	// if (ft_strchr(big, '$') != NULL)
-	// 	annihenv(&big, c);
-	return (big);
 }
 
 void	redir(char const *s, char *c, int *x, int cmdi)
@@ -322,13 +169,7 @@ void	_motor(char const *s, char **ddy, int *x, int cmdi)
 
 	while (s[x[0]] && (x[0] <= ft_strlen((char *)s)) && (ft_strlen(s) != 0 || (!s[x[0]] && x[0] != x[1])))
 	{
-		// if (s[x[0]] && (c_check(s, x[0], c) || !(s[x[0]]) || ((s[x[0]] == '\'' || s[x[0]] == '\"') && x[0] - x[1] != 0))
-		// || (!s[x[1]] && x[0] != x[1]) && s[x[1]] != '\0') // && s[x[1]] != '\0' // && s[x[0]] != '\'' && s[x[0]] != '\"'
-		// if(s[x[0]] && !(s[x[0]] == '\'' || s[x[0]] == '\"')) // VTANGAVORA !!!!!!!!!!!!!!!!!!!!
-		// {
 			x[1] = _sp1(s, x, " 	");
-			// if (s[x[1]] == '\'' || s[x[1]] == '\"' )
-			// 	continue ;
 			if (!( !(s[x[0]]) && c_check(s, x[0] - 1, " 	")) )
 			{
 				if (s[x[1]] == '>' || s[x[1]] == '<')
@@ -336,21 +177,8 @@ void	_motor(char const *s, char **ddy, int *x, int cmdi)
 				x[0] = _sp2(s, x, " 	");
 				if (s[x[1]] != '>' && s[x[1]] != '<')
 					ddy[x[2]++] = annihilator(s, x, " 	");
-				// if ((s[x[0]] == '\'' && s[x[1]] != '\'') || (s[x[0]] == '\"' 
-				// && s[x[1]] != '\"'))
-				// {
-				// 	x[1] = x[0];
-				// 	continue ;
-				// }
-				// else
 				x[1] = x[0] + 1;
 			}
-		// }
-		// else
-		// 	_motor_p2(&s, &c, &ddy, &x);
-
-		// if (c_check(s, x[0], c))
-		// 	x[1]++;
 		x[0]++;
 	}
 }
@@ -373,12 +201,6 @@ char	**split2(char const *s, char *c, int cmdi)
 	_motor(s, ddy, x, cmdi);
 	ddy[x[2]] = NULL;
 	x[0] = 0;
-	// while (ddy[x[0]] != NULL) // !!!!!!! ES SAGH PETQA SPLIT ANELU @NTACQUM LINI  !!!!!!!!!!!!!!!
-	// {
-	// 	if (ddy[x[0]] && ft_strlen(ddy[x[0]]) > 1 && ddy[x[0]][0] == '$')
-	// 		envqt(c, ddy, x[0]);
-	// 	x[0]++;
-	// }
 	return (ddy);
 }
 

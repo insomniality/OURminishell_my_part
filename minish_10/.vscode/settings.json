@@ -13,6 +13,7 @@
 		"__availability": "c",
 		"bitset": "c",
 		"locale": "c",
-		"libft.h": "c"
+		"libft.h": "c",
+		"errno.h": "c"
 	}
 }

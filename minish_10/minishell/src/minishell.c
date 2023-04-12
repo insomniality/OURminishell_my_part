@@ -171,50 +171,34 @@ void	my_waitpid(pid_t pid)
 	// ft_putstr_fd("\n", 2);
 }
 
-void	builtin_exec(char *s, char *arg, t_data *data) // mi kanchi, zut stugi
+void	builtin_exec(char *s, char **arg, t_data *data) // mi kanchi, zut stugi // arg
 {
-	// int	i;
+	char 	**dup;
+	int		i;
 
-	// i = 0;
-	// if (s[x[1]] == '>' || s[x[1]] == '<')
-	// 	redir(s, " 	", x, cmdi);
+	dup = get_argv(arg);
 	if(ft_memcmp(s, "echo", ft_strlen("echo")) == 0 && ft_strlen(s) == ft_strlen("echo"))
-	{
-		echo(arg); // echo TEXT
-		// i = 1;
-	}
+		echo(dup, data); // echo TEXT
 	else if(ft_memcmp(s, "cd", ft_strlen("cd")) == 0 && ft_strlen(s) == ft_strlen("cd"))
-	{
-		cd(arg, data->envp); //cd TEXT //
-		// i = 1;
-	}
+		cd(dup, data); //cd TEXT //
 	else if(ft_memcmp(s, "pwd", ft_strlen("pwd")) == 0 && ft_strlen(s) == ft_strlen("pwd"))
 	{
-		printf("Bareeeev\n");
-		pwd(data->envp);
-		printf("Veeeeebar\n");
-		// i = 1;
+		printf("Mer Pwd\n");
+		pwd(data);
 	}
 	else if(ft_memcmp(s, "export", ft_strlen("export")) == 0 && ft_strlen(s) == ft_strlen("export"))
-	{
-		export(arg, data); // export TEXT
-		// i = 1;
-	}
+		;// export(arg, data); // export TEXT
 	else if(ft_memcmp(s, "unset", ft_strlen("unset")) == 0 && ft_strlen(s) == ft_strlen("unset"))
-	{
-		// unset();
-		// i = 1;
-	}
+		; // unset();
 	else if(ft_memcmp(s, "env", ft_strlen("env")) == 0 && ft_strlen(s) == ft_strlen("env"))
-	{
-		env((const char **)data->envp);
-		// i = 1;
-	}
+		env(data);
 	else if(ft_memcmp(s, "exit", ft_strlen("exit")) == 0 && ft_strlen(s) == ft_strlen("exit"))
 	{
-		// exit();
-		// i = 1;
+		i = exit_for_prj(dup, data);
+		free_ar((void **)dup);
+		exit(i);
 	}
+	free_ar((void **)dup);
 }
 
 int	is_builtin(char *s, char *arg, t_data *data) // mi kanchi, zut stugi
@@ -381,7 +365,7 @@ void	*m_pipe(int pipn, char *txt) // ciklik chi (verjum chka pipe vor het ga mai
 				execve(t_glob->t_cmnds[j].cmd[0], t_glob->t_cmnds[j].cmd, 0);
 			}
 			else
-				builtin_exec(t_glob->t_cmnds[j].cmd[0], t_glob->t_cmnds[j].cmd[0], t_glob);
+				builtin_exec(t_glob->t_cmnds[j].cmd[0], t_glob->t_cmnds[j].cmd, t_glob);
 			exit(1); // stex execve ka; hetevabar petq chi child-um free anel m_argv-n
 		}
 		free_ar((void **)t_glob->t_cmnds[j].cmd); // !!!
@@ -511,52 +495,25 @@ void	main2(int *i, char **txt, char ***m_argv, pid_t *pid)
 	free(txt2);
 	fblt = is_builtin(t_glob->t_cmnds->cmd[0], t_glob->t_cmnds->cmd[1], t_glob);
 	if (fblt == 0)
-	{
-		// write(2, "ccdd\n", 5);
 		*pid = fork();
-	}
 	if (*pid == 0)
 	{
 		if (t_glob->t_cmnds[0].inp == -1 || t_glob->t_cmnds[0].out == -1) // || t_glob->t_cmnds[0].out < -1
 			exit (1);
-
 		if (t_glob->t_cmnds[0].inp != 0)
-		{
 			dup2(t_glob->t_cmnds[0].inp, 0);
-			// close (t_glob->t_cmnds[0].inp);
-		}
 		if (t_glob->t_cmnds[0].out != 1)
-		{
-			// printf( "%d\n", t_glob->t_cmnds[0].out);
-			dup2(t_glob->t_cmnds[0].out, 1);
-
-			// close (t_glob->t_cmnds[0].out);
-		}
-
+			dup2(t_glob->t_cmnds[0].out, 1);;
 		if (fblt == 1)
 		{
-			builtin_exec(t_glob->t_cmnds->cmd[0], t_glob->t_cmnds->cmd[1], t_glob);
+			builtin_exec(t_glob->t_cmnds->cmd[0], t_glob->t_cmnds->cmd, t_glob);
 			dup2(out, 1);
 		}
-		
-		ft_putstr_fd(t_glob->t_cmnds->cmd[0], 2); //
-		ft_putstr_fd("\n", 2); //
-
 		search(&(t_glob->t_cmnds->cmd[0]), getenv("PATH"));
-
-		ft_putstr_fd(t_glob->t_cmnds->cmd[0], 2); //
-		ft_putstr_fd("\n", 2); //
-		ft_putstr_fd("\n", 2); //
-
-
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
-
-
 		if (fblt == 0)
 		{
-			// write(2, "aapp\n", 5);
-			// search(&(t_glob->t_cmnds[0].cmd[0]), getenv("PATH"));
 			execve(t_glob->t_cmnds->cmd[0], t_glob->t_cmnds->cmd, NULL); // stex execve ka; hetevabar petq chi child-um free anel m_argv-n
 			printf("cmd not found\n");
 			exit(1);

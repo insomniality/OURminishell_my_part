@@ -13,50 +13,56 @@
 #include "../libft/libft.h"
 #include "src.h"
 
-void	search(char **name, char *pth) // pwd; /pwd; ./pwd; errori depqum ughaki ban chi poxum(anum); pth = getenv();
-{
-	char	**pts;
-	int		i;
-	char	*buf1;
-	char	*buf2;
 
-	// write(2, ";", 1);
-	// write(2, *name, ft_strlen(*name));
-	// write(2, ";\n", 2);
+int	search_p2(char **name, char *pth)
+{
+	char	*buf1;
 
 	if ((*name)[0] && (*name)[0] == '.' && (*name)[1] && (*name)[1] == '/')
 	{
 		buf1 = ft_substr(*name, 2, ft_strlen(*name) - 2);
 		free(*name);
 		*name = buf1;
-		return ;
+		return (1);
 	}
-	pts = ft_split(pth, ':');
-	i = 0;
-	while (pts[i] != NULL)
+	return (0);
+}
+
+void	search_p3(char **name, char *pth, int *i, char ***pts)
+{
+	char	*buf1;
+	char	*buf2;
+
+	while ((*pts)[*i] != NULL)
 	{
 		if ((*name)[0] && (*name)[0] != '/')
 		{
-			buf1 = ft_strjoin(pts[i], "/");
+			buf1 = ft_strjoin((*pts)[*i], "/");
 			buf2 = ft_strjoin(buf1, *name);
 			free(buf1);
 		}
 		else
 			buf2 = ft_strdup(*name);
-		
 		if (access(buf2, X_OK) == 0)
 		{
 			free(buf2);
 			break ;
 		}
 		free(buf2);
-		i++;
+		(*i)++;
 	}
-	if(pts[i] != NULL)
+}
+
+void	search_p4(char **name, char *pth, int *i, char ***pts)
+{
+	char	*buf1;
+	char	*buf2;
+
+	if((*pts)[*i] != NULL)
 	{
 		if ((*name)[0] && (*name)[0] != '/')
 		{
-			buf1 = ft_strjoin(pts[i], "/");
+			buf1 = ft_strjoin((*pts)[*i], "/");
 			buf2 = ft_strjoin(buf1, *name);
 			free(buf1);
 		}
@@ -66,15 +72,28 @@ void	search(char **name, char *pth) // pwd; /pwd; ./pwd; errori depqum ughaki ba
 		*name = ft_strdup(buf2);
 		free(buf2);
 	}
-	else if (pts[i] == NULL)
+	else if ((*pts)[*i] == NULL)
 	{
 		ft_putstr_fd("-bash: ", 2);
 		ft_putstr_fd(*name, 2);
 		ft_putstr_fd(": command not found\n", 2);
-		//printf("exiteedddd\n");
 		// t_glob->errstat = 127;
 		exit(127);
 	}
+}
+
+void	search(char **name, char *pth) // pwd; /pwd; ./pwd; errori depqum ughaki ban chi poxum(anum); pth = getenv();
+{
+	char	**pts;
+	int		i;
+	char	*buf1;
+	char	*buf2;
+
+	if (search_p2(name, pth))
+		return ;
+	pts = ft_split(pth, ':');
+	i = 0;
+	search_p3(name, pth, &i, &pts);
+	search_p4(name, pth, &i, &pts);
 	free_ar((void **)pts);
-	// errori depqum ughaki ban chi poxum(anum)
 }
