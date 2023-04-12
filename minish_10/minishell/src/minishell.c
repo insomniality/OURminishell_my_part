@@ -391,7 +391,7 @@ void	*m_pipe(int pipn, char *txt) // ciklik chi (verjum chka pipe vor het ga mai
 	}
 
 	i = 0;
-	printf("aaaaaaaaa\n");
+	// printf("aaaaaaaaa\n");
 
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, SIG_IGN);

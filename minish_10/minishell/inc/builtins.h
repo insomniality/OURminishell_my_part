@@ -15,11 +15,11 @@
 
 # define NOT_IN_ENV -2
 
-typedef struct s_cmd
-{
-	char	*cmd_name;
-	char	*args;
-}				t_cmd;
+// typedef struct s_cmd
+// {
+// 	char	*cmd_name;
+// 	char	*args;
+// }				t_cmd;
 
 typedef struct s_cmds
 {
@@ -34,8 +34,8 @@ typedef struct s_cmds
 typedef struct	s_data
 {
 	// int		errstat;
-	t_cmds	*t_cmnds;
-	char	**envp;
+	t_cmds			*t_cmnds;
+	char			**envp;
 	char			**exportp;
 	unsigned char	exit_status;
 }				t_data;
