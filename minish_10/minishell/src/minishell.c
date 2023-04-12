@@ -85,8 +85,11 @@ void	free_ar(void **spl)
 	int	i;
 
 	i = 0;
+	// printf("Mama_mia_%i;_%s\n",i, ((char **)spl)[0]);
 	while (spl[i] != NULL)
+	{
 		free(spl[i++]);
+	}
 	free(spl);
 }
 
@@ -567,7 +570,8 @@ int main(int argc, char **argv, char **envp)
 
 	t_glob = (t_data *)malloc(sizeof(t_data));
 	t_glob->exit_status = 0;
-	fill_env(envp, t_glob);
+	fill_env(envp, &t_glob);
+	// printf("%s_%s\n", envp[0] , (t_glob->envp)[0]); // , (t_glob->envp)[0]
 
 	// t_glob->t_cmnds = (t_cmds *)malloc(sizeof(t_cmds));
 	// t_glob->t_cmnds->inp = 0;
@@ -581,7 +585,7 @@ int main(int argc, char **argv, char **envp)
 		txt = readline("minishell ");
 		if (!txt)
 		{
-			printf("minishell fdgcgvhbjnm%s\n", txt);
+			// printf("minishell fdgcgvhbjnm%s\n", txt);
 			break ;
 		}
 		if (validornot(txt) == 0)
@@ -604,6 +608,11 @@ int main(int argc, char **argv, char **envp)
 	free_ar((void **)t_glob->envp);
 	free(t_glob);
 
+	// while (1)
+	// {
+	// 	/* code */
+	// }
+	
 	//ft_putendl_fd("exit", 2);
 	return (0);
 }

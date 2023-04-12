@@ -13,7 +13,7 @@
 #include "../libft/libft.h"
 #include "../inc/builtins.h"
 
-void	fill_env(char **envp, t_data *data)
+void	fill_env(char **envp, t_data **data)
 {
 	int	i;
 	int	cnt;
@@ -21,8 +21,8 @@ void	fill_env(char **envp, t_data *data)
 	cnt = 0;
 	while (envp && envp[cnt])
 		++cnt;
-	data->envp = (char **)malloc(sizeof(char *) * (cnt + 1));
-	if (!data->envp)
+	(*data)->envp = (char **)malloc(sizeof(char *) * (cnt + 1));
+	if (!(*data)->envp)
 	{
 		perror("data->env");
 		return ;
@@ -30,10 +30,10 @@ void	fill_env(char **envp, t_data *data)
 	i = 0;
 	while (i < cnt)
 	{
-		data->envp[i] = ft_strdup(envp[i]);
+		(*data)->envp[i] = ft_strdup(envp[i]);
 		++i;
 	}
-	data->envp[cnt] = NULL;
+	(*data)->envp[cnt] = NULL;
 }
 
 char	**get_argv(char **argv)

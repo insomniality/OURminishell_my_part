@@ -42,7 +42,7 @@ typedef struct	s_data
 
 t_data			*t_glob;
 
-void			fill_env(char **envp, t_data *data);
+void			fill_env(char **envp, t_data **data);
 void			pwd(t_data *data);
 //void	fill_env(const char **envp, t_data *data);
 //char	**extend_envp(char **envp_old);
