@@ -28,7 +28,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "../inc/builtins.h"
-// #include <readline.h>
 #include <termios.h>
 #include "../libft/libft.h"
 #include "../inc/builtins.h"
@@ -154,17 +153,17 @@ void	my_waitpid(pid_t pid)
 
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
-		t_glob->errstat = WEXITSTATUS(status);
+		t_glob->exit_status = WEXITSTATUS(status);
 	else if(WIFSIGNALED(status))
 	{
-		t_glob->errstat = 128 + WTERMSIG(status);
-		if (t_glob->errstat == 130)
+		t_glob->exit_status = 128 + WTERMSIG(status);
+		if (t_glob->exit_status == 130)
 			ft_putstr_fd( "\n", 2);
-		else if (t_glob->errstat == 131)
+		else if (t_glob->exit_status == 131)
 			ft_putstr_fd( "Quit: 3\n", 2); 
 	}
 	else
-		t_glob->errstat = status;
+		t_glob->exit_status = status;
 	// ft_putnbr_fd(status, 2);
 	// ft_putstr_fd("\t", 2);
 	// ft_putnbr_fd(t_glob->errstat, 2);
@@ -433,13 +432,13 @@ int		validornot(char *txt)
 
 void ignore_symbols(void)
 {
- struct termios new_settings;
+	struct termios new_settings;
 
- if (tcgetattr(0, &new_settings))
-  perror("minishell: tcsetattr");
- new_settings.c_lflag &= ~ECHOCTL;
- if (tcsetattr(0, 0, &new_settings))
-  perror("minishell: tcsetattr");
+	if (tcgetattr(0, &new_settings))
+		perror("minishell: tcsetattr");
+	new_settings.c_lflag &= ~ECHOCTL;
+	if (tcsetattr(0, 0, &new_settings))
+		perror("minishell: tcsetattr");
 }
 
 void reprompt(int sig)
@@ -448,12 +447,12 @@ void reprompt(int sig)
 	write(1, "\n", 1);
 	rl_on_new_line();
 	ignore_symbols();
-	// rl_replace_line("", 0); //
+	rl_replace_line("", 0); //
 	rl_redisplay();
-	t_glob->errstat = 1;
+	t_glob->exit_status = 1;
 }
 
-void define_signals()
+void	define_signals()
 {
 	signal(SIGINT, reprompt);
 	signal(SIGQUIT, SIG_IGN);
@@ -567,7 +566,7 @@ int main(int argc, char **argv, char **envp)
 	int		i;
 
 	t_glob = (t_data *)malloc(sizeof(t_data));
-	t_glob->errstat = 0;
+	t_glob->exit_status = 0;
 	fill_env(envp, t_glob);
 
 	// t_glob->t_cmnds = (t_cmds *)malloc(sizeof(t_cmds));

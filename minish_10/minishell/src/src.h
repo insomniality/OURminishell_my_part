@@ -22,6 +22,7 @@
 #include <fcntl.h>
 #include <string.h>
 # include "../inc/builtins.h"
+# include <termios.h>
 
 int		ft_strchr_indx(const char *s, int c);
 char	**split2(char const *s, char *c, int cmdi);
@@ -41,6 +42,18 @@ void	quoter(char const *s, char *cq, char **ddy, int *x);
 int		_sp2(char const *s, int *x, char *c);
 int		_pieces(char const *s, char *c);
 void	redir(char const *s, char *c, int *x, int cmdi);
+void	heredoc_signals(void);
+char	*remove_quotes(int size, char *str);
+char	*replace(char *str_z, int single_quote);
+char	*ft_get_env(char *env_name, int dlr);
+void	ignore_signals(void);
+void 	reprompt(int sig);
+int		new_size(char *str);
+char	*ft_strcpy(char *dest, char *src);
+char	*ft_strncpy(char *dest, char *src, unsigned int n);
+int		heredoc(char *delimiter);
+void	ignore_symbols(void);
+
 
 
 #endif

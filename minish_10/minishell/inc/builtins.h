@@ -26,11 +26,14 @@ typedef struct s_cmds
 	int		inp;
 	int		out;
 	char	**cmd;
+	int		hd_amount;
+	char	**hd_names;
+
 }				t_cmds;
 
 typedef struct	s_data
 {
-	int		errstat;
+	// int		errstat;
 	t_cmds	*t_cmnds;
 	char	**envp;
 	char			**exportp;

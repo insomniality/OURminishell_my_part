@@ -142,7 +142,12 @@ void	redir(char const *s, char *c, int *x, int cmdi)
 	}
 	if (s[x[1]] != '\0' && s[x[1]] == '<' && s[x[1] + 1] == '<')
 	{
-		/* code */
+		// if (g_args.cmds[i].input != 0)
+		// 	close (g_args.cmds[i].input);
+		fd = heredoc(fname);
+		if (t_glob->t_cmnds[cmdi].inp != 0)
+			close(t_glob->t_cmnds[cmdi].inp);
+		t_glob->t_cmnds[cmdi].inp = fd;
 	}	
 	if (t_glob->t_cmnds[cmdi].inp == -1 || t_glob->t_cmnds[cmdi].out == -1) // || t_glob->t_cmnds[0].out < -1
 	{

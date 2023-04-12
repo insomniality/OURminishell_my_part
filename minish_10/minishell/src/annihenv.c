@@ -34,7 +34,7 @@ void	annihenv_p2_2(char ****str)
 	||  (ft_strlen((**str)[1]) > 1 && ((**str)[1])[0] == '?' && ((**str)[1][1] == ' ' || (**str)[1][2] == '\"')))
 	{
 		free((**str)[1]);
-		(**str)[1] = ft_itoa(t_glob->errstat);
+		(**str)[1] = ft_itoa(t_glob->exit_status);
 	}
 	else
 	{

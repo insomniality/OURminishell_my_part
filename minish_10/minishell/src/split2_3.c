@@ -26,7 +26,7 @@ void	envqt_p2(char **e, char **f, char **w, char **c)
 
 	if ((ft_strlen(*e) == 1 && (*e)[0] == '?' && (*e)[1] == '\0')
 	||  (ft_strlen(*e) > 1 && (*e)[0] == '?' && ((*e)[1] == ' ' || (*e)[2] == '\"'))) //ft_strncmp
-		*w = ft_itoa(t_glob->errstat);
+		*w = ft_itoa(t_glob->exit_status);
 	else if(getenv(*e) != NULL)
 		*w = ft_strdup(getenv(*e)); //getenv-@ ches kara free anes !!!!!!!!!!
 	else if(getenv(*e) == NULL)
@@ -50,7 +50,7 @@ void	envqt2_p2(char **e, char **f, char **w, char **c)
 
 	if ((ft_strlen(*e) == 1 && (*e)[0] == '?' && (*e)[1] == '\0')
 	||  (ft_strlen(*e) > 1 && (*e)[0] == '?' && ((*e)[1] == ' ' || (*e)[2] == '\"'))) //ft_strncmp
-		*w = ft_itoa(t_glob->errstat);
+		*w = ft_itoa(t_glob->exit_status);
 	else if(getenv(*e) != NULL)
 		*w = ft_strdup(getenv(*e)); //getenv-@ ches kara free anes !!!!!!!!!!
 	else if(getenv(*e) == NULL)
