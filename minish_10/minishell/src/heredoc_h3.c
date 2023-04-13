@@ -15,7 +15,6 @@
 #include "../libft/libft.h"
 #include "src.h"
 
-
 char	*ft_malloc(int size)
 {
 	char	*str;

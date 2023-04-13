@@ -13,7 +13,6 @@
 #include "../libft/libft.h"
 #include "src.h"
 
-
 int	search_p2(char **name, char *pth)
 {
 	char	*buf1;
@@ -58,7 +57,7 @@ void	search_p4(char **name, char *pth, int *i, char ***pts)
 	char	*buf1;
 	char	*buf2;
 
-	if((*pts)[*i] != NULL)
+	if ((*pts)[*i] != NULL)
 	{
 		if ((*name)[0] && (*name)[0] != '/')
 		{
@@ -82,7 +81,7 @@ void	search_p4(char **name, char *pth, int *i, char ***pts)
 	}
 }
 
-void	search(char **name, char *pth) // pwd; /pwd; ./pwd; errori depqum ughaki ban chi poxum(anum); pth = getenv();
+void	search(char **name, char *pth)
 {
 	char	**pts;
 	int		i;

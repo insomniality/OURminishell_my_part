@@ -19,11 +19,11 @@
 #include "../libft/libft.h"
 #include "../inc/builtins.h"
 #include "src.h"
-# include <stdio.h>
+#include <stdio.h>
 
 void	main2_p2_f(int out, int fblt)
 {
-	if (t_glob->t_cmnds[0].inp == -1 || t_glob->t_cmnds[0].out == -1) // || t_glob->t_cmnds[0].out < -1
+	if (t_glob->t_cmnds[0].inp == -1 || t_glob->t_cmnds[0].out == -1)
 		exit (1);
 	if (t_glob->t_cmnds[0].inp != 0)
 		dup2(t_glob->t_cmnds[0].inp, 0);
@@ -39,8 +39,8 @@ void	main2_p2_f(int out, int fblt)
 	signal(SIGINT, SIG_DFL);
 	if (fblt == 0)
 	{
-		execve(t_glob->t_cmnds->cmd[0], t_glob->t_cmnds->cmd, NULL); // stex execve ka; hetevabar petq chi child-um free anel m_argv-n
-		exit(1); // printf("cmd not found\n");
+		execve(t_glob->t_cmnds->cmd[0], t_glob->t_cmnds->cmd, NULL);
+		exit(1);
 	}
 }
 
@@ -50,13 +50,13 @@ void	main2_p1(char *txt)
 	char	*txt2;
 	char	**m_argv;
 
-	t_glob->t_cmnds = (t_cmds *)malloc(sizeof(t_cmds)); //commandneri qanakov enq malloc anum
+	t_glob->t_cmnds = (t_cmds *)malloc(sizeof(t_cmds));
 	t_glob->t_cmnds->inp = 0;
 	t_glob->t_cmnds->out = 1;
 	i = 0;
-	while (txt != NULL && c_check(txt, i, " 	")) 
+	while (txt != NULL && c_check(txt, i, " 	"))
 		i += 1;
-	txt2 = ft_substr(txt, i, i + ft_strlen(txt)); // "dd" "    dd" // "dd      "
+	txt2 = ft_substr(txt, i, i + ft_strlen(txt));
 	i = 0;
 	while (!c_check(txt2, i, " 	") && (txt2)[i])
 		i += 1;
@@ -70,9 +70,9 @@ void	main2_p1(char *txt)
 	free(txt2);
 }
 
-void	main2(char *txt) // int *i, char **txt, char ***m_argv, pid_t *pid
+void	main2(char *txt)
 {
-	pid_t 	pid;
+	pid_t	pid;
 	int		fblt;
 	int		out;
 

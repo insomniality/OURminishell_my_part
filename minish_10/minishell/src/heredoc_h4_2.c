@@ -15,7 +15,6 @@
 #include "../libft/libft.h"
 #include "src.h"
 
-
 char	*ft_get_env(char *env_name, int dlr)
 {
 	int		i;
@@ -27,7 +26,7 @@ char	*ft_get_env(char *env_name, int dlr)
 		return (ft_itoa(t_glob->exit_status));
 	if (!ft_strncmp(env_name, "$\0", 2) && dlr)
 		return ("$");
-	while (t_glob->envp[i] != NULL) // '\0'
+	while (t_glob->envp[i] != NULL)
 	{
 		tmp = t_glob->envp[i];
 		len = ft_strlen(env_name + dlr);

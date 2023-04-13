@@ -15,8 +15,7 @@
 #include "../libft/libft.h"
 #include "src.h"
 
-
-int ft_arrlen(void *arr, int typsz)
+int	ft_arrlen(void *arr, int typsz)
 {
 	int	i;
 
@@ -26,7 +25,7 @@ int ft_arrlen(void *arr, int typsz)
 	return (i);
 }
 
-int ft_strchr_indx(const char *s, int c)
+int	ft_strchr_indx(const char *s, int c)
 {
 	int		i;
 	char	*a;
@@ -64,21 +63,20 @@ int	ft_chrcnt(char *str, char chr)
 	return (j);
 }
 
-char	*pipfin(char *t) // xujuja grats; heto parzecnel; "pwd |    " senc depq; SARQI ERROR!!!!!!
+char	*pipfin(char *t)
 {
 	char	*eef;
 	char	*txt;
 	char	*txt2;
 	char	*txt3;
-	
-	txt = ft_strdup(t); // miamit funkciaic drsin@ vor free chanem	
-	eef = ft_strtrim(txt, " "); //!!!!!! karelia tab, enter tenc baner avelacnel; miat heto irakani het khamemeates
+
+	txt = ft_strdup(t);
+	eef = ft_strtrim(txt, " ");
 	if (eef[ft_strlen(eef) - 1] == '|')
 	{
 		free(eef);
 		free(txt);
 		ft_putstr_fd("Err: You must input somthing after pipe\n", 2);
-		// exit(1);
 		return (NULL);
 	}
 	else

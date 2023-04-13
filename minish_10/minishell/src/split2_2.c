@@ -17,7 +17,7 @@ void	qt_chk_tst(char const *s, int *i, int *q, char qt)
 {
 	(*q)++;
 	(*i)++;
-	if(s[(*i)] && s[(*i)] != qt) // petka, te che flag ei avelacnelu
+	if (s[(*i)] && s[(*i)] != qt)
 	{
 		while (s[(*i)] && s[(*i)] != qt)
 			(*i)++;
@@ -25,7 +25,7 @@ void	qt_chk_tst(char const *s, int *i, int *q, char qt)
 			(*q)++;
 	}
 	else if (s[(*i)] && s[(*i)] == qt)
-		(*q)++;	
+		(*q)++;
 }
 
 int	qt_check(char const *s)
@@ -59,9 +59,8 @@ int	c_check(char const *s, int idx, char *c)
 	int	i;
 
 	i = 0;
-
 	if (!s[idx])
-		return (0); // CHGITEM, INCHVOR ERROR; karogha daje tpi
+		return (0);
 	while (c[i])
 	{
 		if (s[idx] == c[i])

@@ -17,7 +17,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-
 void	child(char *delimiter, int fd[2], int has_quotes)
 {
 	char	*line;
@@ -67,7 +66,6 @@ int	wait_for_heredoc(int pid)
 	signaled = WEXITSTATUS(status);
 	if (signaled)
 		ft_putstr_fd("\n", 1);
-	// g_args.dlr = signaled;
 	t_glob->exit_status = signaled;
 	if (signaled)
 		return (1);

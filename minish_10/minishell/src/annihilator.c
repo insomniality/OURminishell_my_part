@@ -13,7 +13,6 @@
 #include "../libft/libft.h"
 #include "src.h"
 
-
 void	annimot_p1(char **big, char *a, char ***snt, int *strti)
 {
 	int	*i;
@@ -81,9 +80,8 @@ void	annihmotor(char	**big, char *a, char ***snt)
 {
 	int	strti[2];
 
-
 	strti[0] = 0;
-	while (ft_strchr(&((*big)[strti[0]]), '\'') != NULL 
+	while (ft_strchr(&((*big)[strti[0]]), '\'') != NULL
 	|| ft_strchr(&((*big)[strti[0]]), '\"') != NULL)
 	{
 		annimot_p1(big, a, snt, strti);
@@ -92,7 +90,7 @@ void	annihmotor(char	**big, char *a, char ***snt)
 	}
 }
 
-char	*annihilator(char const *s, int *x, char *c)//char **env
+char	*annihilator(char const *s, int *x, char *c)
 {
 	char	*big;
 	char	a;

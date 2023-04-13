@@ -21,7 +21,6 @@ int	ispipe(char *s)
 	char	a;
 
 	i = 0;
-
 	while (s[i] && s[i] != '|')
 	{
 		a = s[i];
@@ -33,12 +32,12 @@ int	ispipe(char *s)
 		}
 		i++;
 	}
-	if(s[i] && s[i] == '|')
+	if (s[i] && s[i] == '|')
 		return (1);
 	return (0);
 }
 
-int		validornot(char *txt)
+int	validornot(char *txt)
 {
 	int		i;
 	char	*a;
@@ -46,7 +45,7 @@ int		validornot(char *txt)
 	if (*txt == '\0')
 		return (0);
 	i = 0;
-	while (txt[i] == ' ' || txt[i] == '	') // tab-@ vayte chesel kara input anes; indz tvuma signala dra hamar
+	while (txt[i] == ' ' || txt[i] == '	')
 		i++;
 	if (txt[i] == '\0')
 		return (0);
@@ -55,7 +54,7 @@ int		validornot(char *txt)
 		return (0);
 	else
 		free(a);
-	if(qt_check(txt) == 0)
+	if (qt_check(txt) == 0)
 		return (0);
 	return (1);
 }

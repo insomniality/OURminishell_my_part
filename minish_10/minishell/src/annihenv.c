@@ -19,7 +19,7 @@ void	annihenv_p1(char ***str, int *j, int *strtj, char **sm)
 	(*j) = (*strtj);
 	while ((*sm)[(*j)] != '$')
 		(*j)++;
-	if ((*j) == 0) // == 0
+	if ((*j) == 0)
 		(*str)[0] = ft_strdup("");
 	else
 		(*str)[0] = ft_substr((*sm), 0, (*j));
@@ -29,9 +29,10 @@ void	annihenv_p1(char ***str, int *j, int *strtj, char **sm)
 
 void	annihenv_p2_2(char ****str)
 {
-	//ft_strncmp
-	if ((ft_strlen((**str)[1]) == 1 && (**str)[1][0] == '?' && (**str)[1][1] == '\0')
-	||  (ft_strlen((**str)[1]) > 1 && ((**str)[1])[0] == '?' && ((**str)[1][1] == ' ' || (**str)[1][2] == '\"')))
+	if ((ft_strlen((**str)[1]) == 1 && (**str)[1][0] == '?'
+	&& (**str)[1][1] == '\0')
+	|| (ft_strlen((**str)[1]) > 1 && ((**str)[1])[0] == '?'
+	&& ((**str)[1][1] == ' ' || (**str)[1][2] == '\"')))
 	{
 		free((**str)[1]);
 		(**str)[1] = ft_itoa(t_glob->exit_status);
@@ -48,11 +49,11 @@ void	annihenv_p2(char ***str, int *j, int *strtj, char **sm)
 {
 	(*j)++;
 	(*strtj) = (*j);
-	while ((*sm)[(*j)] && !c_check((*sm), (*j), " 	") && (*sm)[(*j)] != '$')//$PATH_ (ibr prabel)
+	while ((*sm)[(*j)] && !c_check((*sm), (*j), " 	") && (*sm)[(*j)] != '$')
 		(*j)++;
 	if ((*str)[1] == NULL)
 	{
-		if ((*j) == (*strtj)) // == 0
+		if ((*j) == (*strtj))
 			(*str)[1] = ft_strdup("");
 		else
 			(*str)[1] = ft_substr((*sm), (*strtj), (*j) - (*strtj));
@@ -63,14 +64,14 @@ void	annihenv_p2(char ***str, int *j, int *strtj, char **sm)
 void	annihenv_p3(char ***str, int *j, int *strtj, char **sm)
 {
 	(*strtj) = (*j);
-	while ((*sm)[(*j)]) //$PATH_ (ibr prabel) 
+	while ((*sm)[(*j)])
 		(*j)++;
-	if ((*j) == (*strtj)) // == 0
+	if ((*j) == (*strtj))
 		(*str)[2] = ft_strdup("");
 	else
 		(*str)[2] = ft_substr((*sm), (*strtj), (*j) - (*strtj));
 	free((*sm));
-	if(!(*str)[1])
+	if (!(*str)[1])
 		(*sm) = ft_strjoin((*str)[0], "");
 	else
 		(*sm) = ft_strjoin((*str)[0], (*str)[1]);
@@ -86,7 +87,7 @@ void	annihenv(char **sm, char *c)
 	s = str;
 	j = 0;
 	strtj = j;
-	while ((*sm)[j] && ft_strchr(&((*sm)[strtj]), '$') != NULL) // &(*sm)[strtj]
+	while ((*sm)[j] && ft_strchr(&((*sm)[strtj]), '$') != NULL)
 	{
 		annihenv_p1(&s, &j, &strtj, sm);
 		annihenv_p2(&s, &j, &strtj, sm);

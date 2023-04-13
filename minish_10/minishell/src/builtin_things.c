@@ -15,31 +15,30 @@
 #include "../libft/libft.h"
 #include "src.h"
 
-
-int		l(char *s)
+int	l(char *s)
 {
 	return (ft_strlen(s));
 }
 
-void	builtin_exec(char *s, char **arg, t_data *data) // mi kanchi, zut stugi // arg
+void	builtin_exec(char *s, char **arg, t_data *data)
 {
-	char 	**dup;
+	char	**dup;
 	int		i;
 
 	dup = get_argv(arg);
-	if(ft_memcmp(s, "echo", l("echo")) == 0 && l(s) == l("echo"))
-		echo(dup, data); // echo TEXT
-	else if(ft_memcmp(s, "cd", l("cd")) == 0 && l(s) == l("cd"))
-		cd(dup, data); //cd TEXT //
-	else if(ft_memcmp(s, "pwd", l("pwd")) == 0 && l(s) == l("pwd"))
+	if (ft_memcmp(s, "echo", l("echo")) == 0 && l(s) == l("echo"))
+		echo(dup, data);
+	else if (ft_memcmp(s, "cd", l("cd")) == 0 && l(s) == l("cd"))
+		cd(dup, data);
+	else if (ft_memcmp(s, "pwd", l("pwd")) == 0 && l(s) == l("pwd"))
 		pwd(data);
-	else if(ft_memcmp(s, "export", l("export")) == 0 && l(s) == l("export"))
-		;// export(arg, data); // export TEXT
-	else if(ft_memcmp(s, "unset", l("unset")) == 0 && l(s) == l("unset"))
-		; // unset();
-	else if(ft_memcmp(s, "env", l("env")) == 0 && l(s) == l("env"))
+	else if (ft_memcmp(s, "export", l("export")) == 0 && l(s) == l("export"))
+		;
+	else if (ft_memcmp(s, "unset", l("unset")) == 0 && l(s) == l("unset"))
+		;
+	else if (ft_memcmp(s, "env", l("env")) == 0 && l(s) == l("env"))
 		env(data);
-	else if(ft_memcmp(s, "exit", l("exit")) == 0 && l(s) == l("exit"))
+	else if (ft_memcmp(s, "exit", l("exit")) == 0 && l(s) == l("exit"))
 	{
 		i = exit_for_prj(dup, data);
 		free_ar((void **)dup);
@@ -48,24 +47,24 @@ void	builtin_exec(char *s, char **arg, t_data *data) // mi kanchi, zut stugi // 
 	free_ar((void **)dup);
 }
 
-int	is_builtin(char *s, char *arg, t_data *data) // mi kanchi, zut stugi
+int	is_builtin(char *s, char *arg, t_data *data)
 {
 	int	i;
 
 	i = 0;
-	if(ft_memcmp(s, "echo", l("echo")) == 0 && l(s) == l("echo"))
+	if (ft_memcmp(s, "echo", l("echo")) == 0 && l(s) == l("echo"))
 		i = 1;
-	else if(ft_memcmp(s, "cd", l("cd")) == 0 && l(s) == l("cd"))
+	else if (ft_memcmp(s, "cd", l("cd")) == 0 && l(s) == l("cd"))
 		i = 1;
-	else if(ft_memcmp(s, "pwd", l("pwd")) == 0 && l(s) == l("pwd"))
+	else if (ft_memcmp(s, "pwd", l("pwd")) == 0 && l(s) == l("pwd"))
 		i = 1;
-	else if(ft_memcmp(s, "export", l("export")) == 0 && l(s) == l("export"))
+	else if (ft_memcmp(s, "export", l("export")) == 0 && l(s) == l("export"))
 		i = 1;
-	else if(ft_memcmp(s, "unset", l("unset")) == 0 && l(s) == l("unset"))
+	else if (ft_memcmp(s, "unset", l("unset")) == 0 && l(s) == l("unset"))
 		i = 1;
-	else if(ft_memcmp(s, "env", l("env")) == 0 && l(s) == l("env"))
+	else if (ft_memcmp(s, "env", l("env")) == 0 && l(s) == l("env"))
 		i = 1;
-	else if(ft_memcmp(s, "exit", l("exit")) == 0 && l(s) == l("exit"))
+	else if (ft_memcmp(s, "exit", l("exit")) == 0 && l(s) == l("exit"))
 		i = 1;
 	return (i);
 }

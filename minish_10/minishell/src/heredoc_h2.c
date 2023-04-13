@@ -17,7 +17,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-
 void	stop_heredoc(int sig)
 {
 	(void)sig;
