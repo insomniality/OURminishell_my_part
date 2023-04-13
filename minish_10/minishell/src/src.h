@@ -21,6 +21,8 @@
 # include <stdio.h>
 #include <fcntl.h>
 #include <string.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 # include "../inc/builtins.h"
 # include <termios.h>
 
@@ -53,7 +55,24 @@ char	*ft_strcpy(char *dest, char *src);
 char	*ft_strncpy(char *dest, char *src, unsigned int n);
 int		heredoc(char *delimiter);
 void	ignore_symbols(void);
-
+void	define_signals();
+void 	reprompt(int sig);
+void	my_waitpid(pid_t pid);
+char	*pipfin(char *t);
+int		ft_chrcnt(char *str, char chr);
+int		ft_arrlen(void *arr, int typsz);
+void	lowerc(char ***m_argv);
+int		validornot(char *txt);
+int		ispipe(char *s);
+int		is_builtin(char *s, char *arg, t_data *data);
+void	builtin_exec(char *s, char **arg, t_data *data);
+void	*m_pipe(int pipn, char *txt);
+void	m_pipe_p2_1(char **txt, char **txt2);
+void	m_pipe_p3_f1(int pipn, int *j, int ***fd);
+void	m_pipe_p3_f2(int pipn, int *j);
+void	m_pipe_p4_c1(int pipn, int ***fd);
+void	m_pipe_p5_fr1(int pipn, int ***fd, char **txt, int **pid);
+void	main2(int *i, char **txt, char ***m_argv, pid_t *pid);
 
 
 #endif
