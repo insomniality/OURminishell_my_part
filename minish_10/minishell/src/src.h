@@ -43,7 +43,6 @@ int		qt_strt(char const *s, int *x, char *c);
 void	quoter(char const *s, char *cq, char **ddy, int *x);
 int		_sp2(char const *s, int *x, char *c);
 int		_pieces(char const *s, char *c);
-void	redir(char const *s, char *c, int *x, int cmdi);
 void	heredoc_signals(void);
 char	*remove_quotes(int size, char *str);
 char	*replace(char *str_z, int single_quote);
@@ -72,7 +71,9 @@ void	m_pipe_p3_f1(int pipn, int *j, int ***fd);
 void	m_pipe_p3_f2(int pipn, int *j);
 void	m_pipe_p4_c1(int pipn, int ***fd);
 void	m_pipe_p5_fr1(int pipn, int ***fd, char **txt, int **pid);
-void	main2(int *i, char **txt, char ***m_argv, pid_t *pid);
+void	main2(char *txt);
+char	*nxt_pipe(char *str);
+void	redir(char const *s, char *c, int *x, int cmdi);
 
 
 #endif

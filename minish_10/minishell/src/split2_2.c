@@ -46,14 +46,9 @@ int	qt_check(char const *s)
 		if (s[i])
 			i++;
 	}
-	// printf("Ow0 %i;%i\n", j, k);
 	if (!(j % 2 == 0 && k % 2 == 0))
 	{
 		ft_putstr_fd("Err; Unclosed quotes\n", 2);
-		// printf("%c ; i=%i ; j=%i ; k=%i \n", s[i], i, j, k);
-		// while (1) 						// !!!!!!!!!!! LEAK CHKAR< BAYC HASTAT SENC OKA????????
-		// 	;
-		// exit(1);
 		return (0);
 	}
 	return (1);

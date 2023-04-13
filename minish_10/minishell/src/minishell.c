@@ -42,7 +42,7 @@ char **split_fk(char *txt, char *c)
 	a[1] = NULL;
 	return (a);
 }
-
+/*
 void	main2(int *i, char **txt, char ***m_argv, pid_t *pid)
 {
 	char	*txt2;
@@ -111,13 +111,10 @@ void	main2(int *i, char **txt, char ***m_argv, pid_t *pid)
 	define_signals();
 	free(t_glob->t_cmnds);
 }
-
+*/
 int main(int argc, char **argv, char **envp)
 {
-	pid_t	pid;
 	char	*txt;
-	char	**m_argv;
-	int		i;
 
 	t_glob = (t_data *)malloc(sizeof(t_data));
 	t_glob->exit_status = 0;
@@ -140,10 +137,9 @@ int main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		else
-			main2(&i, &txt, &m_argv, &pid);
+			main2(txt);
 		free(txt);
 	}
 	free_ar((void **)t_glob->envp);
 	free(t_glob);
-	return (0);
 }

@@ -15,6 +15,27 @@
 #include "../libft/libft.h"
 #include "src.h"
 
+char	*nxt_pipe(char *str)
+{
+	int		i;
+	char	a;
+	
+	i = 0;
+	while (str[i] != '\0')
+	{
+		a = str[i];
+		if (a == '\'' || a == '\"')
+		{
+			i++;
+			while (str[i] && str[i] != a)
+				i++;
+		}
+		else if (str[i] == '|')
+			break ;
+		i++;
+	}
+	return (&(str[i]));
+}
 
 void	m_pipe_p2(int pipn, char **txt, char **txt2, char ***m_argv)
 {
@@ -38,7 +59,7 @@ void	m_pipe_p2(int pipn, char **txt, char **txt2, char ***m_argv)
 		if (j++ != pipn) // baci verjinic
 		{
 			(*txt2) = (*txt);
-			(*txt) = ft_strdup(ft_strchr((*txt), '|') + 1);
+			(*txt) = ft_strdup(nxt_pipe(*txt) + 1); //ft_strchr((*txt), '|') + 1
 			free((*txt2));
 		}
 		(*m_argv) = NULL;

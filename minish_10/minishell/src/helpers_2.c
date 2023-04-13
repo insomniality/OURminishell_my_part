@@ -42,19 +42,25 @@ int ft_strchr_indx(const char *s, int c)
 
 int	ft_chrcnt(char *str, char chr)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	a;
 
 	i = 0;
 	j = 0;
 	while (i < ft_strlen(str))
 	{
-		if (str[i] == chr)
+		a = str[i];
+		if (a == '\'' || a == '\"')
+		{
+			i++;
+			while (str[i] && str[i] != a)
+				i++;
+		}
+		else if (a == chr)
 			j++;
 		i++;
 	}
-	// printf("Yep=%i\n",j);
-	// j++;
 	return (j);
 }
 

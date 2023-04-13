@@ -90,7 +90,7 @@ void	m_pipe_p2_1(char **txt, char **txt2)
 	(*txt2) = (*txt);
 	if (ft_strchr((*txt), '|') != NULL)
 	{
-		while ((*txt2) != NULL && &((*txt2)[i]) != ft_strchr((*txt2), '|'))
+		while ((*txt2) != NULL && &((*txt2)[i]) != nxt_pipe((*txt2))) // ft_strchr((*txt2), '|')
 			i++;
 		(*txt2) = ft_substr((*txt2), 0, i);
 	}

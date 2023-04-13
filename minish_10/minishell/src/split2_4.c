@@ -51,36 +51,41 @@ int	qt_strt(char const *s, int *x, char *c)
 	return (x[0]);
 }
 
-// int	_pieces(char const *s, char *c) // vrode arden chishta // V
-// {
-// 	char	a;
-// 	int		i;
-// 	int		j;
+void	_pieces_p3(char const *s, int **i, char a, char *c)
+{
+	if (a == '>' || a == '<')
+	{
+		while (s[(**i)] && c_check(s, ++(**i), " 	><")) // s[++i] != a
+			;
+		if (s[(**i)])
+			(**i)++;
+		while (s[(**i)] && !c_check(s, (**i), " 	"))
+			(**i)++;
+	}
+	else if (c_check(s, (**i)++, c))
+		while (s[(**i)] && c_check(s, (**i), c))
+			(**i)++;
+}
 
-// 	i = 0;
-// 	j = 0;
-// 	while (s[i])
-// 	{
-// 		a = s[i];
-// 		if ((i == 0 && s[i] && s[i] != ' ' && s[i] != '	') ||
-// 		(i != 0 && s[i] && 
-// 		(s[i - 1] == ' ' || s[i - 1] == '	' 
-// 		|| s[i - 1] == '\'' 
-// 		|| s[i - 1] == '\"')))
-// 			j++;
-// 		if (a == '\"' || a == '\'')
-// 		{
-// 			while (s[++i] != a)
-// 				;
-// 			i++;
-// 			j++;
-// 		}
-// 		else if (c_check(s, i++, c))
-// 			while (s[i] && c_check(s, i, c))
-// 				i++;
-// 	}
-// 	return (j);
-// }
+void	_pieces_p2(char const *s, int *i, int *j, char *c)
+{
+	char	a;
+
+	a = s[*i];
+	if ( (((*i) == 0 && s[(*i)] && !c_check(s, (*i), " 	><")) 
+	|| ((*i) != 0 && s[(*i)] && !c_check(s, (*i), "><") 
+	&& c_check(s, (*i) - 1, " 	\"\'"))))
+		(*j)++;
+	if (a == '\"' || a == '\'')
+	{
+		while (s[++(*i)] != a)
+			;
+		(*i)++;
+		(*j)++;
+	}
+	else
+		_pieces_p3(s, &i, a, c);
+}
 
 int	_pieces(char const *s, char *c) // vrode arden chishta // V
 {
@@ -91,31 +96,6 @@ int	_pieces(char const *s, char *c) // vrode arden chishta // V
 	i = 0;
 	j = 0;
 	while (s[i])
-	{
-		a = s[i];
-		if ( ((i == 0 && s[i] && !c_check(s, i, " 	><")) || (i != 0 && s[i] && !c_check(s, i, "><") && c_check(s, i - 1, " 	\"\'"))) ) //
-			j++;
-		if (a == '\"' || a == '\'')
-		{
-			while (s[++i] != a)
-				;
-			i++;
-			j++;
-		}
-		else if (a == '>' || a == '<')
-		{
-			while (s[i] && c_check(s, ++i, " 	><")) // s[++i] != a
-				;
-			if (s[i])
-				i++;
-			while (s[i] && !c_check(s, i, " 	"))
-				i++;
-			// j++;
-		}
-		else if (c_check(s, i++, c))
-			while (s[i] && c_check(s, i, c))
-				i++;
-	}
-	// printf("%i\n", j);
+		_pieces_p2(s, &i, &j, c);
 	return (j);
 }
